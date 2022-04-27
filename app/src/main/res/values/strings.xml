@@ -28,6 +28,6 @@
     <string name="pressure">Тиск</string>
     <string name="humidity">Вологість повітря</string>
     <string name="wind_speed">Швидкість вітру</string>
-    <string name="search_history">Search histoty</string>
+    <string name="search_history">Search history</string>
 
 </resources>
