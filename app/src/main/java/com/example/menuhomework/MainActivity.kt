@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initDrawer(toolbar)
 
         if(savedInstanceState == null)
-            replaceFragment(CityFragment())
+            replaceFragment(CityFragment.newInstance(this))
     }
 
     private fun initDrawer(toolbar: Toolbar) {

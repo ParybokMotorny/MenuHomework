@@ -9,12 +9,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.interfaces.FragmentCityResult
+import java.lang.IndexOutOfBoundsException
 import java.lang.NullPointerException
+import javax.sql.StatementEventListener
 
+private const val ARG_PARAM1 = "param1"
 
 class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
 
     private var binding: FragmentCityBinding? = null
+    private var listener: FragmentCityResult? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            listener = it.getSerializable(ARG_PARAM1) as FragmentCityResult
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +47,12 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
     }
 
+    // калічно передаємо кожеш об'єкт у актівіті
     private fun giveDataToActivity(item: WeatherRequest) {
-        (activity as MainActivity).onFragmentResult(item)
+        (activity as FragmentCityResult).onFragmentResult(item)
     }
 
+    // опрацбовуэмо результат роботи ретрофіту
     override fun onCompleted(content: WeatherRequest) {
         val fragment = WeatherFragment.newInstance(content)
 
@@ -47,11 +61,12 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
             .replace(R.id.weather_container, fragment)
             .commit()
 
-        giveDataToActivity(content)
+        listener?.onFragmentResult(content)
     }
 
+    // опрацьовуємо помилку реторофіту
     override fun onFail(t: Throwable) {
-        if (t == NullPointerException() || t == NullPointerException()) {
+        if (t.equals(IndexOutOfBoundsException())) {
             AlertDialog.Builder(requireContext())
                 .setTitle("This city does not exist")
                 .setCancelable(false)
@@ -60,5 +75,16 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
                 .create()
                 .show()
         }
+
+    }
+
+    companion object{
+        @JvmStatic
+        fun newInstance(listener: FragmentCityResult) =
+            CityFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_PARAM1, listener)
+                }
+            }
     }
 }

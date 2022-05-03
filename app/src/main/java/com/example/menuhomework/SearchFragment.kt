@@ -63,13 +63,11 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
     }
 
     fun receiveData(data: MutableList<WeatherRequest>){
-        for(it in data){
-            this.data.add(it)
-        }
+        this.data = data
     }
 
 
-    fun initData(adapter: ListAdapter){
+    private fun initData(adapter: ListAdapter){
         for(it in data){
             adapter.addItem(it)
         }
@@ -111,7 +109,7 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
                 .setMessage("2 + 2 = 4?") // Можно указать и пиктограмму
                 .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
                 .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
-                { dialog, id ->
+                { dialog, _ ->
                     Toast.makeText(
                         requireContext(),
                         "Найн",
@@ -119,7 +117,7 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
                     ).show()
                 }
                 .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
-                { dialog, id ->
+                { dialog, _ ->
                     Toast.makeText(
                         requireContext(),
                         "Я",

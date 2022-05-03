@@ -7,6 +7,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.IndexOutOfBoundsException
 
 class Retrofit(private var listener: OnResponseCompleted) {
 
@@ -42,14 +43,9 @@ class Retrofit(private var listener: OnResponseCompleted) {
                     response.body()?.let {
                         listener.onCompleted(it)
                     }?:run{
-                        listener.onFail(NullPointerException())
-                    }
-
-                    if(response.body() == null){
-                        listener.onFail(NullPointerException())
+                        listener.onFail(IndexOutOfBoundsException())
                     }
                 }
-
 
                 override fun onFailure(call: Call<WeatherRequest?>, t: Throwable) {
                     listener.onFail(t)
@@ -58,6 +54,7 @@ class Retrofit(private var listener: OnResponseCompleted) {
 
     }
 
+    // шнтерфейс для опрацювання результату роботи ретрофіту
     interface OnResponseCompleted {
         fun onCompleted(content: WeatherRequest)
         fun onFail(t: Throwable)
