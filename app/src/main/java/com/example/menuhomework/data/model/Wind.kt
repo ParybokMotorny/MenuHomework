@@ -1,8 +1,16 @@
 package com.example.menuhomework.data.model
 
-import kotlin.random.Random
+import com.google.gson.annotations.Expose
+
+import com.google.gson.annotations.SerializedName
+
 
 class Wind {
-    var speed = Random.nextInt(0, 60)
-    var deg = Random.nextInt(0, 60)
+    @SerializedName("speed")
+    @Expose
+    var speed = 0f
+
+    @SerializedName("deg")
+    @Expose
+    var deg = 0f
 }

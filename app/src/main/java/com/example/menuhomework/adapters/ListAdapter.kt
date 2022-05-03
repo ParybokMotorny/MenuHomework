@@ -1,4 +1,4 @@
-package com.example.menuhomework
+package com.example.menuhomework.adapters
 
 import android.app.Activity
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.menuhomework.R
 import com.example.menuhomework.data.SearchHistory
 import com.example.menuhomework.data.model.WeatherRequest
 
@@ -15,14 +16,19 @@ class ListAdapter
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     var menuPosition = 0
+    var itemClickListener: OnItemClickListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_layout, parent, false)
-        return ViewHolder(view)
+
+        val vh = ViewHolder(view)
+        itemClickListener?.let { vh.setOnClickListener(it, viewType) }
+
+        return vh
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Заполнение элементов холдера
         val textElement: TextView = holder.textElement
         textElement.text = SearchHistory.data[position].name
@@ -43,21 +49,20 @@ class ListAdapter
     }
 
     override fun getItemCount(): Int {
-//        return 1
         return SearchHistory.data.size
     }
 
     fun addItem(element: WeatherRequest) {
-
-        if (SearchHistory.data.find {
-                it.name == element.name
-            } == null) {
+//
+//        if (SearchHistory.data.find {
+//                it.name == element.name
+//            } == null) {
             SearchHistory.data.add(element)
             notifyItemInserted(SearchHistory.data.size - 1)
-        }
-        else{
-            updateItem(SearchHistory.data.size - 1, element)
-        }
+//        }
+//        else{
+//            updateItem(SearchHistory.data.size - 1, element)
+//        }
     }
 
     fun updateItem(position: Int, element: WeatherRequest) {
@@ -78,5 +83,13 @@ class ListAdapter
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textElement: TextView = itemView.findViewById(R.id.textElement)
+
+        fun setOnClickListener(listener: OnItemClickListener, position: Int) {
+            textElement.setOnClickListener {
+                val adapterPosition = adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION)
+                    listener.onItemClick(it, SearchHistory.data[adapterPosition])
+            }
+        }
     }
 }

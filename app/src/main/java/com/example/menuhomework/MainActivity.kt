@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.menuhomework.data.model.WeatherRequest
 import com.example.menuhomework.databinding.ActivityMainBinding
+import com.example.menuhomework.interfaces.FragmentCityResult
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, FragmentCityResult {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    FragmentCityResult {
     private var binding: ActivityMainBinding? = null
     private var data: MutableList<WeatherRequest> = ArrayList()
 

@@ -30,4 +30,19 @@
     <string name="wind_speed">Швидкість вітру</string>
     <string name="search_history">Search history</string>
 
+    <string name="hint_enter_password">Enter Password</string>
+    <string name="button_swap_color">SWAP COLOR</string>
+    <string name="c">C</string>
+
+    <string-array name="countries_array">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>American Samoa</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Anguilla</item>
+        <item>Antarctica</item>
+        <item>India</item>
+    </string-array>
 </resources>

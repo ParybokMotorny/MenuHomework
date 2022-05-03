@@ -1,8 +1,16 @@
 package com.example.menuhomework.data.model
 
-import kotlin.random.Random
+import com.google.gson.annotations.Expose
+
+import com.google.gson.annotations.SerializedName
+
 
 class Coord {
-    var lat: Float = Random.nextFloat()
-    var lon = Random.nextFloat()
+    @SerializedName("lon")
+    @Expose
+    var lon = 0f
+
+    @SerializedName("lat")
+    @Expose
+    var lat = 0f
 }

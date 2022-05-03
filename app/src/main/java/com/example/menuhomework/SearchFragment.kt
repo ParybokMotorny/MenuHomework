@@ -2,23 +2,17 @@ package com.example.menuhomework
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.adapters.ListAdapter
 import com.example.menuhomework.databinding.FragmentSearchBinding
+import com.example.menuhomework.data.model.WeatherRequest
 import com.google.android.material.snackbar.Snackbar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -27,15 +21,6 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
     private var binding: FragmentSearchBinding? = null
     private lateinit var adapter: ListAdapter
     private var data: MutableList<WeatherRequest> = ArrayList()
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +56,10 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
         adapter = ListAdapter(requireActivity())
         initData(adapter)
         data = ArrayList()
+
+        adapter.itemClickListener = this
         recyclerView?.adapter = adapter
+
     }
 
     fun receiveData(data: MutableList<WeatherRequest>){
@@ -116,7 +104,32 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
         if (id == R.id.action_settings) {
             return true
         } else if (id == R.id.action_clear) {
-            adapter.clearItems()
+            val builder = AlertDialog.Builder(requireContext())
+            // В билдере указываем заголовок окна (можно указывать как ресурс,
+            // так и строку)
+            builder.setTitle("Ар ю шуа ебаут зет?") // Указываем сообщение в окне (также есть вариант со строковым параметром)
+                .setMessage("2 + 2 = 4?") // Можно указать и пиктограмму
+                .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
+                .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
+                { dialog, id ->
+                    Toast.makeText(
+                        requireContext(),
+                        "Найн",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
+                { dialog, id ->
+                    Toast.makeText(
+                        requireContext(),
+                        "Я",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    adapter.clearItems()
+                }
+            val alert: AlertDialog = builder.create()
+            alert.show()
             return true
         }
 
@@ -137,35 +150,45 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
         val id = item.itemId
         when (id) {
             R.id.remove_context -> {
-                adapter.removeItem(adapter.menuPosition)
+                val builder = AlertDialog.Builder(requireContext())
+                // В билдере указываем заголовок окна (можно указывать как ресурс,
+                // так и строку)
+                builder.setTitle("Ар ю шуа ебаут зет?") // Указываем сообщение в окне (также есть вариант со строковым параметром)
+                    .setMessage("2 + 2 = 4?") // Можно указать и пиктограмму
+                    .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
+                    .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
+                    { dialog, id ->
+                        Toast.makeText(
+                            requireContext(),
+                            "Найн",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
+                    { dialog, id ->
+                        Toast.makeText(
+                            requireContext(),
+                            "Я",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        adapter.removeItem(adapter.menuPosition)
+                    }
+                val alert: AlertDialog = builder.create()
+                alert.show()
                 return true
             }
         }
         return super.onContextItemSelected(item)
     }
 
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
     override fun onItemClick(view: View, element: WeatherRequest) {
+        val fragment = WeatherFragment.newInstance(element)
 
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

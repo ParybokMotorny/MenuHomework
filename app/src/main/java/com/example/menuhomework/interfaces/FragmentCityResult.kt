@@ -1,4 +1,4 @@
-package com.example.menuhomework
+package com.example.menuhomework.interfaces
 
 import com.example.menuhomework.data.model.WeatherRequest
 

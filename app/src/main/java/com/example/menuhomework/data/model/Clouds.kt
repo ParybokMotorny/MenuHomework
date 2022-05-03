@@ -1,8 +1,12 @@
 package com.example.menuhomework.data.model
 
-import kotlin.random.Random
+import com.google.gson.annotations.Expose
+
+import com.google.gson.annotations.SerializedName
+
 
 class Clouds {
-
-    var all: Int = Random.nextInt(0, 30)
+    @SerializedName("all")
+    @Expose
+    var all = 0
 }
