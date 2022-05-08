@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textViewTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/temperature" />
@@ -49,7 +49,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textViewPressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pressure" />
@@ -70,7 +70,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textViewHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/humidity" />
@@ -91,18 +91,18 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wind_speed" />
+                android:text="@string/date_of_request" />
 
             <EditText
-                android:id="@+id/textWindspeed"
+                android:id="@+id/dateEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:enabled="false"
-                android:inputType="textPersonName"
+                android:inputType="datetime"
                 android:text=""
                 android:textColor="@color/colorPrimaryDark" />
         </TableRow>

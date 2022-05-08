@@ -2,25 +2,26 @@ package com.example.menuhomework
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.menuhomework.adapters.ListAdapter
+import com.example.menuhomework.adapters.RequestRecyclerAdapter
 import com.example.menuhomework.databinding.FragmentSearchBinding
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.retrofit.model.WeatherRequest
+import com.example.menuhomework.database.App
+import com.example.menuhomework.database.Request
+import com.example.menuhomework.database.WeatherSource
+import com.example.menuhomework.database.dao.WeatherDao
 import com.google.android.material.snackbar.Snackbar
 
 
-class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     private var binding: FragmentSearchBinding? = null
-    private lateinit var adapter: ListAdapter
+    private lateinit var adapter: RequestRecyclerAdapter
     private var data: MutableList<WeatherRequest> = ArrayList()
+    private lateinit var weatherSource: WeatherSource
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +54,12 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
         recyclerView?.layoutManager = layoutManager
 
         //встановлюю адаптер
-        adapter = ListAdapter(requireActivity())
+
+        val weatherDao: WeatherDao = App.instance.db.educationDao
+
+        weatherSource = WeatherSource(weatherDao)
+
+        adapter = RequestRecyclerAdapter(weatherSource, requireActivity())
         initData(adapter)
         data = ArrayList()
 
@@ -67,7 +73,7 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
     }
 
 
-    private fun initData(adapter: ListAdapter){
+    private fun initData(adapter: RequestRecyclerAdapter){
         for(it in data){
             adapter.addItem(it)
         }
@@ -105,25 +111,13 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
             val builder = AlertDialog.Builder(requireContext())
             // В билдере указываем заголовок окна (можно указывать как ресурс,
             // так и строку)
-            builder.setTitle("Ар ю шуа ебаут зет?") // Указываем сообщение в окне (также есть вариант со строковым параметром)
-                .setMessage("2 + 2 = 4?") // Можно указать и пиктограмму
+            builder.setTitle("Ви впевнені щ") // Указываем сообщение в окне (также есть вариант со строковым параметром)
                 .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
                 .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
                 { dialog, _ ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Найн",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
                 .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
                 { dialog, _ ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Я",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
                     adapter.clearItems()
                 }
             val alert: AlertDialog = builder.create()
@@ -144,7 +138,6 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val menuInfo = item.menuInfo
         val id = item.itemId
         when (id) {
             R.id.remove_context -> {
@@ -152,25 +145,14 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
                 // В билдере указываем заголовок окна (можно указывать как ресурс,
                 // так и строку)
                 builder.setTitle("Ар ю шуа ебаут зет?") // Указываем сообщение в окне (также есть вариант со строковым параметром)
-                    .setMessage("2 + 2 = 4?") // Можно указать и пиктограмму
                     .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
                     .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
-                    { dialog, id ->
-                        Toast.makeText(
-                            requireContext(),
-                            "Найн",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    { dialog, _ ->
                     }
                     .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
-                    { dialog, id ->
-                        Toast.makeText(
-                            requireContext(),
-                            "Я",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    { dialog, _ ->
 
-                        adapter.removeItem(adapter.menuPosition)
+                        adapter.removeItem(adapter.menuPosition.toInt())
                     }
                 val alert: AlertDialog = builder.create()
                 alert.show()
@@ -180,7 +162,7 @@ class SearchFragment : Fragment(), ListAdapter.OnItemClickListener {
         return super.onContextItemSelected(item)
     }
 
-    override fun onItemClick(view: View, element: WeatherRequest) {
+    override fun onItemClick(view: View, element: Request) {
         val fragment = WeatherFragment.newInstance(element)
 
         parentFragmentManager

@@ -1,25 +1,27 @@
 package com.example.menuhomework
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.menuhomework.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentCityBinding
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.interfaces.FragmentCityResult
-import java.lang.IndexOutOfBoundsException
-import java.lang.NullPointerException
-import javax.sql.StatementEventListener
+import com.example.menuhomework.retrofit.Retrofit
 
 private const val ARG_PARAM1 = "param1"
+private const val CITY = "city"
 
 class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
 
     private var binding: FragmentCityBinding? = null
     private var listener: FragmentCityResult? = null
+    private var showError: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +43,36 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         super.onViewCreated(view, savedInstanceState)
         val refresh = binding?.refresh
         refresh?.setOnClickListener(clickListener)
+
+        loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
-        Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
+        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+    }
+
+    private fun savePreferences(sharedPref: SharedPreferences){
+        val editor = sharedPref.edit()
+
+        editor.putString(CITY, binding?.city?.text.toString())
+        showError = true
+
+        editor.apply()
+    }
+
+    private fun loadPreferences(sharedPref: SharedPreferences){
+        // Для получения настроек Editor не нужен: получаем их прямо из
+        // SharedPreferences
+        val city = sharedPref.getString(CITY, null)
+        binding?.city?.setText(city)
+        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+        showError = false
     }
 
     // калічно передаємо кожеш об'єкт у актівіті
@@ -54,7 +82,7 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
 
     // опрацбовуэмо результат роботи ретрофіту
     override fun onCompleted(content: WeatherRequest) {
-        val fragment = WeatherFragment.newInstance(content)
+        val fragment = WeatherFragment.newInstance(MainToRequestConverter.convert(content))
 
         childFragmentManager
             .beginTransaction()
@@ -65,20 +93,20 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
     }
 
     // опрацьовуємо помилку реторофіту
-    override fun onFail(t: Throwable) {
-        if (t.equals(IndexOutOfBoundsException())) {
+    override fun onFail(message: String) {
+        if(showError){
             AlertDialog.Builder(requireContext())
-                .setTitle("This city does not exist")
+                .setTitle(message)
                 .setCancelable(false)
                 .setPositiveButton("OK")  // Ставим слушатель, нажатие будем обрабатывать
                 { dialog, id -> }
                 .create()
                 .show()
         }
-
+        showError = true
     }
 
-    companion object{
+    companion object {
         @JvmStatic
         fun newInstance(listener: FragmentCityResult) =
             CityFragment().apply {

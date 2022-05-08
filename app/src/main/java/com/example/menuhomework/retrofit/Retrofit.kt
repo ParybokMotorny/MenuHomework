@@ -1,13 +1,12 @@
-package com.example.menuhomework
+package com.example.menuhomework.retrofit
 
-import com.example.menuhomework.interfaces.OpenWeather
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.database.interfaces.OpenWeather
+import com.example.menuhomework.retrofit.model.WeatherRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.IndexOutOfBoundsException
 
 class Retrofit(private var listener: OnResponseCompleted) {
 
@@ -43,12 +42,12 @@ class Retrofit(private var listener: OnResponseCompleted) {
                     response.body()?.let {
                         listener.onCompleted(it)
                     }?:run{
-                        listener.onFail(IndexOutOfBoundsException())
+                        listener.onFail("This city does not exist")
                     }
                 }
 
                 override fun onFailure(call: Call<WeatherRequest?>, t: Throwable) {
-                    listener.onFail(t)
+                    listener.onFail("Can`t connect to server. Check your Internet connection")
                 }
             })
 
@@ -57,6 +56,6 @@ class Retrofit(private var listener: OnResponseCompleted) {
     // шнтерфейс для опрацювання результату роботи ретрофіту
     interface OnResponseCompleted {
         fun onCompleted(content: WeatherRequest)
-        fun onFail(t: Throwable)
+        fun onFail(message: String)
     }
 }

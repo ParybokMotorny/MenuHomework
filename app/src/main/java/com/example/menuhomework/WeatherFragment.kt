@@ -5,21 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.database.Request
 import com.example.menuhomework.databinding.FragmentWeatherBinding
 
 private const val ARG_PARAM1 = "param1"
 
 class WeatherFragment : Fragment() {
 
-    var item: WeatherRequest? = null
+    var item: Request? = null
     private var binding: FragmentWeatherBinding? = null
     private val AbsoluteZero = -273.15f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            item = it.getSerializable(ARG_PARAM1) as WeatherRequest
+            item = it.getSerializable(ARG_PARAM1) as Request
         }
     }
 
@@ -37,34 +37,32 @@ class WeatherFragment : Fragment() {
         item?.let { displayWeather(it) }
     }
 
-    private fun displayWeather(weatherRequest: WeatherRequest) {
+    private fun displayWeather(request: Request) {
         binding?.textTemperature?.setText(
             String.format(
                 "%f2",
-                weatherRequest.main.temp + AbsoluteZero
+                request.temp + AbsoluteZero
             )
         )
         binding?.textPressure?.setText(
 
             String.format(
                 "%d",
-                weatherRequest.main.pressure
+                request.pressure
             )
         )
         binding?.textHumidity?.setText(
             String.format(
                 "%d",
-                weatherRequest.main.humidity
+                request.humidity
             )
         )
-        binding?.textWindspeed?.setText(
-                weatherRequest.wind.speed.toString()
-        )
+        binding?.dateEditText?.setText(request.date.toString())
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: WeatherRequest) =
+        fun newInstance(param1: Request) =
             WeatherFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_PARAM1, param1)

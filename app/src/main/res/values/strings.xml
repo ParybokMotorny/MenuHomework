@@ -27,12 +27,12 @@
     <string name="temperature">Температура</string>
     <string name="pressure">Тиск</string>
     <string name="humidity">Вологість повітря</string>
-    <string name="wind_speed">Швидкість вітру</string>
     <string name="search_history">Search history</string>
 
     <string name="hint_enter_password">Enter Password</string>
     <string name="button_swap_color">SWAP COLOR</string>
     <string name="c">C</string>
+    <string name="date_of_request">Дата запиту</string>
 
     <string-array name="countries_array">
         <item>Afghanistan</item>

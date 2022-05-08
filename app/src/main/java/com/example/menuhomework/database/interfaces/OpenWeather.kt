@@ -1,6 +1,6 @@
-package com.example.menuhomework.interfaces
+package com.example.menuhomework.database.interfaces
 
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.retrofit.model.WeatherRequest
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

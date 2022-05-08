@@ -9,10 +9,13 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.menuhomework.data.model.WeatherRequest
+import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.databinding.ActivityMainBinding
 import com.example.menuhomework.interfaces.FragmentCityResult
 import com.google.android.material.navigation.NavigationView
+
+private const val ARG_PARAM1 = "param1"
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     FragmentCityResult {
@@ -26,8 +29,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar = initToolbar()
         initDrawer(toolbar)
 
-        if(savedInstanceState == null)
+        if (savedInstanceState == null)
             replaceFragment(CityFragment.newInstance(this))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        binding = null
     }
 
     private fun initDrawer(toolbar: Toolbar) {
@@ -45,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val id = item.itemId
 
         if (id == R.id.nav_home) {
-            replaceFragment(CityFragment())
+            replaceFragment(CityFragment.newInstance(this))
         } else if (id == R.id.nav_search) {
             val fragment = SearchFragment()
             fragment.receiveData(data)
@@ -57,7 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
