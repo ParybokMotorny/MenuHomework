@@ -24,4 +24,6 @@ class Request: Serializable {
     var humidity = 0
 
     var date: Date? = null
+
+    var icon: String? = null
 }

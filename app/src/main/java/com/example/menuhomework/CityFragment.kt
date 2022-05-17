@@ -1,18 +1,20 @@
 package com.example.menuhomework
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.example.menuhomework.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentCityBinding
-import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.interfaces.FragmentCityResult
 import com.example.menuhomework.retrofit.Retrofit
+import com.example.menuhomework.retrofit.model.WeatherRequest
 
 private const val ARG_PARAM1 = "param1"
 private const val CITY = "city"
@@ -51,10 +53,11 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         super.onDestroyView()
 
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
+        binding = null
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
-        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+        Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
     }
 
     private fun savePreferences(sharedPref: SharedPreferences){
@@ -71,7 +74,7 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         // SharedPreferences
         val city = sharedPref.getString(CITY, null)
         binding?.city?.setText(city)
-        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+        Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
         showError = false
     }
 
@@ -83,6 +86,10 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
     // опрацбовуэмо результат роботи ретрофіту
     override fun onCompleted(content: WeatherRequest) {
         val fragment = WeatherFragment.newInstance(MainToRequestConverter.convert(content))
+
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
 
         childFragmentManager
             .beginTransaction()

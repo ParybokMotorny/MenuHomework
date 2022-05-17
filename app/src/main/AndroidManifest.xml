@@ -3,6 +3,8 @@
     package="com.example.menuhomework">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".database.App"
@@ -12,10 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MenuHomework">
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="6b0423304b20ad534ccceecc6d3c729a" />
 
         <activity
             android:name=".MainActivity"

@@ -1,8 +1,11 @@
 package com.example.menuhomework
 
+import android.app.Activity
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -13,6 +16,7 @@ import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.databinding.ActivityMainBinding
 import com.example.menuhomework.interfaces.FragmentCityResult
 import com.google.android.material.navigation.NavigationView
+import com.squareup.picasso.Picasso
 
 private const val ARG_PARAM1 = "param1"
 
@@ -28,6 +32,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding?.root)
         val toolbar = initToolbar()
         initDrawer(toolbar)
+
+//        val uri = Uri.parse("http://openweathermap.org/img/w/04d.png")
+//
+//        Picasso.get()
+//            .load(uri)
+//            .into(binding?.appBarMain?.imageView)
 
         if (savedInstanceState == null)
             replaceFragment(CityFragment.newInstance(this))
@@ -60,6 +70,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             fragment.receiveData(data)
             data = ArrayList()
             replaceFragment(fragment)
+            val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
