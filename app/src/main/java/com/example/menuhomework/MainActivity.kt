@@ -1,8 +1,10 @@
 package com.example.menuhomework
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -65,6 +67,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // передаю історію пошуку у відповідний фрагмент
             fragment.receiveData(data)
             data = ArrayList()
+
+            val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+
             replaceFragment(fragment)
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)

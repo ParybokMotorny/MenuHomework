@@ -12,7 +12,7 @@ object MainToRequestConverter {
         request.humidity = element.main.humidity
         request.pressure = element.main.pressure
         request.temp = element.main.temp
-        request.icon = element.weather.icon
+        request.icon = element.weather[0].icon
 
         return request
     }

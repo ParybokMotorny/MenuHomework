@@ -1,5 +1,6 @@
 package com.example.menuhomework
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import com.example.menuhomework.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentCityBinding
@@ -54,6 +56,7 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
 
         // зберігаю поточнйи запит
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
+        binding = null
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
@@ -81,6 +84,10 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
     // опрацьовую результат роботи ретрофіту
     override fun onCompleted(content: WeatherRequest) {
         val fragment = WeatherFragment.newInstance(MainToRequestConverter.convert(content))
+
+        val imm: InputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
 
         // фрагмент з відображенням погоди
         childFragmentManager
