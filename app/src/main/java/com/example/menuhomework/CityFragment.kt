@@ -17,6 +17,7 @@ import com.example.menuhomework.retrofit.Retrofit
 private const val ARG_PARAM1 = "param1"
 private const val CITY = "city"
 
+// фрагмент для запитів
 class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
 
     private var binding: FragmentCityBinding? = null
@@ -44,12 +45,14 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         val refresh = binding?.refresh
         refresh?.setOnClickListener(clickListener)
 
+        // дістаю останній запит запит
         loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
+        // зберігаю поточнйи запит
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
@@ -75,30 +78,27 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         showError = false
     }
 
-    // калічно передаємо кожеш об'єкт у актівіті
-    private fun giveDataToActivity(item: WeatherRequest) {
-        (activity as FragmentCityResult).onFragmentResult(item)
-    }
-
-    // опрацбовуэмо результат роботи ретрофіту
+    // опрацьовую результат роботи ретрофіту
     override fun onCompleted(content: WeatherRequest) {
         val fragment = WeatherFragment.newInstance(MainToRequestConverter.convert(content))
 
+        // фрагмент з відображенням погоди
         childFragmentManager
             .beginTransaction()
             .replace(R.id.weather_container, fragment)
             .commit()
 
+        // передаю дані в актівіті
         listener?.onFragmentResult(content)
     }
 
-    // опрацьовуємо помилку реторофіту
+    // опрацьовую помилку реторофіту
     override fun onFail(message: String) {
         if(showError){
             AlertDialog.Builder(requireContext())
                 .setTitle(message)
                 .setCancelable(false)
-                .setPositiveButton("OK")  // Ставим слушатель, нажатие будем обрабатывать
+                .setPositiveButton("OK")
                 { dialog, id -> }
                 .create()
                 .show()

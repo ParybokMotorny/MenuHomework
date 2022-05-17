@@ -20,15 +20,19 @@ private const val ARG_PARAM1 = "param1"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     FragmentCityResult {
     private var binding: ActivityMainBinding? = null
+
+    // історія пошуку, яку я з CityFragment передаю у SearchFragment
     private var data: MutableList<WeatherRequest> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+        // додаю drawerMenu для переходу між запиом та історією пошуку
         val toolbar = initToolbar()
         initDrawer(toolbar)
 
+        // якщо це перше входження в додаток, то показую фрагмент з запитом
         if (savedInstanceState == null)
             replaceFragment(CityFragment.newInstance(this))
     }
@@ -57,6 +61,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             replaceFragment(CityFragment.newInstance(this))
         } else if (id == R.id.nav_search) {
             val fragment = SearchFragment()
+
+            // передаю історію пошуку у відповідний фрагмент
             fragment.receiveData(data)
             data = ArrayList()
             replaceFragment(fragment)
@@ -66,6 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    // метод для створення фрагментів
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
@@ -90,6 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    // сюди будуть передаватися дані з фрагмента з запитом
     override fun onFragmentResult(item: WeatherRequest) {
         data.add(item)
     }

@@ -10,10 +10,12 @@ import com.example.menuhomework.databinding.FragmentWeatherBinding
 
 private const val ARG_PARAM1 = "param1"
 
+// фрагмент для відображення погоди
 class WeatherFragment : Fragment() {
 
     var item: Request? = null
     private var binding: FragmentWeatherBinding? = null
+
     private val AbsoluteZero = -273.15f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +39,12 @@ class WeatherFragment : Fragment() {
         item?.let { displayWeather(it) }
     }
 
+    // метод для відображення погоди
     private fun displayWeather(request: Request) {
         binding?.textTemperature?.setText(
             String.format(
                 "%f2",
+                // температура приходить з кельвінах, тому треба перевести її в цельсії
                 request.temp + AbsoluteZero
             )
         )

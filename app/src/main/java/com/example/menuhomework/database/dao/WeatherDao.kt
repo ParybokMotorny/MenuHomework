@@ -33,4 +33,13 @@ interface WeatherDao {
     @Query("DELETE FROM request")
     fun deleteAll()
 
+    @Query("SELECT * FROM request ORDER BY " +
+            "CASE WHEN :isAsc = 1 THEN city END ASC, " +
+            "CASE WHEN :isAsc = 2 THEN city END DESC ")
+    fun getAllSortedByName(isAsc : Int): List<Request>
+
+    @Query("SELECT * FROM request ORDER BY " +
+            "CASE WHEN :isAsc = 1 THEN date END ASC, " +
+            "CASE WHEN :isAsc = 2 THEN date END DESC ")
+    fun getAllSortedByDate(isAsc : Int): List<Request>
 }

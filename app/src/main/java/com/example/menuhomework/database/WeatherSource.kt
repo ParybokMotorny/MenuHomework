@@ -13,6 +13,12 @@ class WeatherSource(private val educationDao: WeatherDao) {
         requests = educationDao.getAllRequests()
     }
 
+    private fun saveRequests(req: List<Request>){
+        for(x in req){
+            educationDao.insertRequest(x)
+        }
+    }
+
     // Получаем количество записей
     val countRequests: Long
         get() = educationDao.getCountRequests()
@@ -39,5 +45,17 @@ class WeatherSource(private val educationDao: WeatherDao) {
     fun clearRequests() {
         educationDao.deleteAll()
         loadRequests()
+    }
+
+    fun sortByName(isAsc : Int){
+        requests = educationDao.getAllSortedByName(isAsc)
+        educationDao.deleteAll()
+        saveRequests(requests)
+    }
+
+    fun sortByDate(isAsc : Int){
+        requests = educationDao.getAllSortedByDate(isAsc)
+        educationDao.deleteAll()
+        saveRequests(requests)
     }
 }

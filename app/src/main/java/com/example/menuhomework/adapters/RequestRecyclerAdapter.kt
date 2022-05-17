@@ -105,4 +105,14 @@ class RequestRecyclerAdapter(
         dataSource.clearRequests()
         notifyDataSetChanged()
     }
+
+    fun sortByName(isAsc: Int){
+        dataSource.sortByName(isAsc)
+        notifyDataSetChanged()
+    }
+
+    fun sortByDate(isAsc: Int){
+        dataSource.sortByDate(isAsc)
+        notifyDataSetChanged()
+    }
 }

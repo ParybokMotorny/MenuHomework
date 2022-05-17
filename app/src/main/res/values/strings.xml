@@ -33,16 +33,9 @@
     <string name="button_swap_color">SWAP COLOR</string>
     <string name="c">C</string>
     <string name="date_of_request">Дата запиту</string>
-
-    <string-array name="countries_array">
-        <item>Afghanistan</item>
-        <item>Albania</item>
-        <item>Algeria</item>
-        <item>American Samoa</item>
-        <item>Andorra</item>
-        <item>Angola</item>
-        <item>Anguilla</item>
-        <item>Antarctica</item>
-        <item>India</item>
-    </string-array>
+    <string name="sort">Sort</string>
+    <string name="sort_by_name">Sort by name</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="sort_by_name_descending">Sort by name descending</string>
+    <string name="sort_by_date_descending">Sort by date descending</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.menuhomework
 
 import android.os.Bundle
+import android.os.Message
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -15,11 +16,13 @@ import com.example.menuhomework.database.WeatherSource
 import com.example.menuhomework.database.dao.WeatherDao
 import com.google.android.material.snackbar.Snackbar
 
-
+// фрагмент з історією пошуку
 class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     private var binding: FragmentSearchBinding? = null
     private lateinit var adapter: RequestRecyclerAdapter
+
+    // дані які прийдуть з актівіті
     private var data: MutableList<WeatherRequest> = ArrayList()
     private lateinit var weatherSource: WeatherSource
 
@@ -27,7 +30,6 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         registerForContextMenu(binding?.recyclerList as View)
@@ -53,8 +55,7 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView?.layoutManager = layoutManager
 
-        //встановлюю адаптер
-
+        //робота з бд
         val weatherDao: WeatherDao = App.instance.db.educationDao
 
         weatherSource = WeatherSource(weatherDao)
@@ -68,61 +69,58 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     }
 
-    fun receiveData(data: MutableList<WeatherRequest>){
+    // отримую дані з актівіті
+    fun receiveData(data: MutableList<WeatherRequest>) {
         this.data = data
     }
 
-
-    private fun initData(adapter: RequestRecyclerAdapter){
-        for(it in data){
+    // передаю дані в адаптер
+    private fun initData(adapter: RequestRecyclerAdapter) {
+        for (it in data) {
             adapter.addItem(it)
         }
+    }
+
+    // метод для відображення діалогових вікон
+    private fun showDialog(message: String, function: () -> Unit) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(message)
+            .setCancelable(false)
+            .setNegativeButton("Ні")
+            { _, _ ->
+            }
+            .setPositiveButton("Так")
+            { _, _ ->
+                function()
+            }
+            .create()
+            .show()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         requireActivity().menuInflater.inflate(R.menu.main, menu)
-
-        val search = menu.findItem(R.id.action_search)
-
-        val searchText = search.actionView as SearchView
-        searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            // Реагирует на конец ввода поиска
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Snackbar.make(searchText, query, Snackbar.LENGTH_LONG).show()
-                return true
-            }
-
-            // Реагирует на нажатие каждой клавиши
-            override fun onQueryTextChange(newText: String): Boolean {
-                return true
-            }
-        })
-        return
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true
         } else if (id == R.id.action_clear) {
-            val builder = AlertDialog.Builder(requireContext())
-            // В билдере указываем заголовок окна (можно указывать как ресурс,
-            // так и строку)
-            builder.setTitle("Ви впевнені щ") // Указываем сообщение в окне (также есть вариант со строковым параметром)
-                .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
-                .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
-                { dialog, _ ->
-                }
-                .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
-                { dialog, _ ->
-                    adapter.clearItems()
-                }
-            val alert: AlertDialog = builder.create()
-            alert.show()
+            showDialog("Ви впевнені, що хочете видалити усі елементи?") {
+                adapter.clearItems()
+            }
             return true
+        } else if (id == R.id.sort_by_name) {
+            adapter.sortByName(1)
+        } else if (id == R.id.sort_by_date) {
+            adapter.sortByDate(1)
+        } else if (id == R.id.sort_by_name_descending) {
+            adapter.sortByName(2)
+        } else if (id == R.id.sort_by_date_descending) {
+            adapter.sortByDate(2)
         }
 
         return super.onOptionsItemSelected(item)
@@ -141,21 +139,10 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         val id = item.itemId
         when (id) {
             R.id.remove_context -> {
-                val builder = AlertDialog.Builder(requireContext())
-                // В билдере указываем заголовок окна (можно указывать как ресурс,
-                // так и строку)
-                builder.setTitle("Ар ю шуа ебаут зет?") // Указываем сообщение в окне (также есть вариант со строковым параметром)
-                    .setCancelable(false) // Устанавливаем кнопку (название кнопки также можно задавать строкой)
-                    .setNegativeButton("Ноу айм нот")  // Ставим слушатель, нажатие будем обрабатывать
-                    { dialog, _ ->
-                    }
-                    .setPositiveButton("Йес ит из")  // Ставим слушатель, нажатие будем обрабатывать
-                    { dialog, _ ->
+                showDialog("Ви впевнені, що хочете видалити цей елемент?") {
+                    adapter.removeItem(adapter.menuPosition.toInt())
+                }
 
-                        adapter.removeItem(adapter.menuPosition.toInt())
-                    }
-                val alert: AlertDialog = builder.create()
-                alert.show()
                 return true
             }
         }
