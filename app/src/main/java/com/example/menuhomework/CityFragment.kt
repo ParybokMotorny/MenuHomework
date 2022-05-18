@@ -14,13 +14,14 @@ import com.example.menuhomework.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.interfaces.FragmentCityResult
-import com.example.menuhomework.retrofit.Retrofit
+import com.example.menuhomework.retrofit.RetrofitCity
+import com.google.android.gms.maps.SupportMapFragment
 
 private const val ARG_PARAM1 = "param1"
 private const val CITY = "city"
 
 // фрагмент для запитів
-class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
+class CityFragment : Fragment(), RetrofitCity.OnResponseCompleted {
 
     private var binding: FragmentCityBinding? = null
     private var listener: FragmentCityResult? = null
@@ -47,6 +48,10 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         val refresh = binding?.refresh
         refresh?.setOnClickListener(clickListener)
 
+        binding?.getPosition?.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.fragment_container, SupportMapFragment()).commit()
+        }
+
         // дістаю останній запит запит
         loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
@@ -60,7 +65,7 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
-        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+        RetrofitCity(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
     }
 
     private fun savePreferences(sharedPref: SharedPreferences){
@@ -77,7 +82,7 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         // SharedPreferences
         val city = sharedPref.getString(CITY, null)
         binding?.city?.setText(city)
-        Retrofit(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
+        RetrofitCity(this).run(binding?.city?.text.toString(), BuildConfig.MAPS_API_KEY)
         showError = false
     }
 

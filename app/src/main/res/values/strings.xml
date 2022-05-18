@@ -38,4 +38,6 @@
     <string name="sort_by_date">Sort by date</string>
     <string name="sort_by_name_descending">Sort by name descending</string>
     <string name="sort_by_date_descending">Sort by date descending</string>
+    <string name="position">Отримати погоду по вашій позиції</string>
+    <string name="maps">Maps</string>
 </resources>

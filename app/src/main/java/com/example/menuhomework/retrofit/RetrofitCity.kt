@@ -1,16 +1,18 @@
 package com.example.menuhomework.retrofit
 
-import com.example.menuhomework.database.interfaces.OpenWeather
+import com.example.menuhomework.retrofit.interfaces.OpenWeather
 import com.example.menuhomework.retrofit.model.WeatherRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.reflect.KClass
 
-class Retrofit(private var listener: OnResponseCompleted) {
+class RetrofitCity(
+    private var listener: OnResponseCompleted
+) {
 
-    private val AbsoluteZero = -273.15f
     private var openWeather: OpenWeather? = null
 
     init{

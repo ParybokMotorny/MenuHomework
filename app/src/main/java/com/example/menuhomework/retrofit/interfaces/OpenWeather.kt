@@ -1,4 +1,4 @@
-package com.example.menuhomework.database.interfaces
+package com.example.menuhomework.retrofit.interfaces
 
 import com.example.menuhomework.retrofit.model.WeatherRequest
 import retrofit2.Call;

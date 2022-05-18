@@ -1,5 +1,6 @@
 package com.example.menuhomework
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.menuhomework.database.Request
 import com.example.menuhomework.databinding.FragmentWeatherBinding
+import com.squareup.picasso.Picasso
 
 private const val ARG_PARAM1 = "param1"
 
@@ -62,6 +64,12 @@ class WeatherFragment : Fragment() {
             )
         )
         binding?.dateEditText?.setText(request.date.toString())
+
+        val uri = Uri.parse("http://openweathermap.org/img/w/${request.icon}.png")
+
+        Picasso.get()
+            .load(uri)
+            .into(binding?.imageView)
     }
 
     companion object {

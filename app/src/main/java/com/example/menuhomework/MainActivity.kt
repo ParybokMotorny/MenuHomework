@@ -14,14 +14,18 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.menuhomework.retrofit.model.WeatherRequest
 import com.example.menuhomework.databinding.ActivityMainBinding
 import com.example.menuhomework.interfaces.FragmentCityResult
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.navigation.NavigationView
 
 private const val ARG_PARAM1 = "param1"
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+class MainActivity :
+    AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
     FragmentCityResult {
     private var binding: ActivityMainBinding? = null
+    private lateinit var mMap: GoogleMap
 
     // історія пошуку, яку я з CityFragment передаю у SearchFragment
     private var data: MutableList<WeatherRequest> = ArrayList()
@@ -72,6 +76,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 
             replaceFragment(fragment)
+        } else if (id == R.id.nav_gps) {
+            replaceFragment(MapsFragment.newInstance(this))
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
