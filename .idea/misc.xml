@@ -3,12 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/activity_main.xml" value="0.2692502532928065" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/app_bar_main.xml" value="0.2692502532928065" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/content_main.xml" value="0.1524822695035461" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/fragment_city.xml" value="0.2695035460992908" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/fragment_maps.xml" value="0.12962962962962962" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/fragment_search.xml" value="0.2692502532928065" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/fragment_weather.xml" value="0.21739130434782608" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/item.xml" value="0.1524822695035461" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/list_item_layout.xml" value="0.5541666666666667" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/layout/nav_header_main.xml" value="0.5541666666666667" />
         <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/menu/activity_main_drawer.xml" value="0.5541666666666667" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/menu/context_menu.xml" value="0.28703703703703703" />
+        <entry key="..\:/Roman/android/notBase/lesson7/MenuHomework/app/src/main/res/menu/main.xml" value="0.28703703703703703" />
         <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/MenuHomework/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.211" />
         <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/MenuHomework/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/MenuHomework/app/src/main/res/layout/app_bar_main.xml" value="0.176" />
