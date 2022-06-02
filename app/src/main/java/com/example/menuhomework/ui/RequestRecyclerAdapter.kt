@@ -1,4 +1,4 @@
-package com.example.menuhomework.ui.adapters
+package com.example.menuhomework.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.menuhomework.model.database.converters.MainToRequestConverter.convert
 import com.example.menuhomework.R
+import com.example.menuhomework.databinding.ItemBinding
 import com.example.menuhomework.ui.Search.Sortings
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import com.example.menuhomework.model.database.Request
@@ -20,6 +22,13 @@ class RequestRecyclerAdapter(
     private val activity: Activity
 ) :
     RecyclerView.Adapter<RequestRecyclerAdapter.ViewHolder>() {
+
+    var notes: List<Request> = listOf()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     // Позиция в списке, на которой было нажато меню
     var menuPosition: Long = 0
@@ -44,7 +53,12 @@ class RequestRecyclerAdapter(
         holder.requestCity.text = student.city
         holder.studentDate.text = student.date.toString()
 
-        itemClickListener?.let { holder.setOnClickListener(it, WeatherSource.requests.value!![position]) }
+        itemClickListener?.let {
+            holder.setOnClickListener(
+                it,
+                WeatherSource.requests.value!![position]
+            )
+        }
 
         // Тут определяем, какой пункт меню был нажат
         holder.cardView.setOnLongClickListener { view: View? ->
@@ -56,26 +70,6 @@ class RequestRecyclerAdapter(
         activity.registerForContextMenu(holder.cardView)
     }
 
-    override fun getItemCount(): Int {
-        return WeatherSource.countRequests.toInt()
-    }
-
-    class ViewHolder(var cardView: View) : RecyclerView.ViewHolder(cardView) {
-        var requestCity: TextView = cardView.findViewById(R.id.textRequestDate)
-        var studentDate: TextView = cardView.findViewById(R.id.textRequestCity)
-
-        fun setOnClickListener(listener: OnItemClickListener, request: Request) {
-            this.cardView.setOnClickListener {
-                val adapterPosition = adapterPosition
-                if (adapterPosition != RecyclerView.NO_POSITION)
-                    listener.onItemClick(it, request)
-            }
-        }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(view: View, element: Request)
-    }
 
     fun addItem(element: WeatherRequest) {
 
@@ -109,16 +103,6 @@ class RequestRecyclerAdapter(
         notifyDataSetChanged()
     }
 
-//    fun sortByName(isAsc: Int){
-//        dataSource.sortByName(isAsc)
-//        notifyDataSetChanged()
-//    }
-//
-//    fun sortByDate(isAsc: Int){
-//        dataSource.sortByDate(isAsc)
-//        notifyDataSetChanged()
-//    }
-
     @SuppressLint("NotifyDataSetChanged")
     fun sort(sortings: Int) {
         when (sortings) {
@@ -129,5 +113,32 @@ class RequestRecyclerAdapter(
         }
 
         notifyDataSetChanged()
+    }
+
+    class ViewHolder(var cardView: View) : RecyclerView.ViewHolder(cardView) {
+
+        private var ui: ItemBinding = ItemBinding.bind(itemView)
+
+
+        fun setOnClickListener(listener: OnItemClickListener, request: Request) {
+            this.cardView.setOnClickListener {
+                val adapterPosition = adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION)
+                    listener.onItemClick(it, request)
+            }
+        }
+
+        fun bind(request: Request) {
+            ui.textRequestCity.text = request.city
+            ui.textRequestDate.text = request.date.toString()
+
+            itemView.setOnClickListener {
+                clickListener.onItemClick(note)
+            }
+        }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, element: Request)
     }
 }

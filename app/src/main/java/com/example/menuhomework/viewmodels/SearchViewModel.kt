@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.menuhomework.model.database.WeatherSource
-import com.example.menuhomework.ui.SearchViewState
+import com.example.menuhomework.viewStates.SearchViewState
 
 class SearchViewModel : ViewModel() {
 

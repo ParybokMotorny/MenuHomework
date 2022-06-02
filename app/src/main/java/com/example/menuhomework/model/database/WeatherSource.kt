@@ -8,18 +8,18 @@ import com.example.menuhomework.model.database.dao.WeatherDao
 object WeatherSource{
     // Буфер с данными: сюда будем подкачивать данные из БД
 
-    lateinit var requests: MutableLiveData<List<Request>>
+    lateinit var requests: List<Request>
 
     private lateinit var educationDao: WeatherDao
 
     fun initDao(dao: WeatherDao){
         educationDao = dao
-        requests = MutableLiveData(dao.getAllRequests())
+        requests = dao.getAllRequests()
     }
 
     // Загружаем студентов в буфер
     private fun loadRequests() {
-        requests = MutableLiveData(educationDao.getAllRequests())
+        requests = educationDao.getAllRequests()
     }
 
     fun saveRequests(req: List<Request>){
@@ -57,14 +57,14 @@ object WeatherSource{
     }
 
     fun sortByName(isAsc : Int){
-        requests = MutableLiveData(educationDao.getAllSortedByName(isAsc))
+        requests = educationDao.getAllSortedByName(isAsc)
         educationDao.deleteAll()
-        saveRequests(requests.value!!)
+        saveRequests(requests)
     }
 
     fun sortByDate(isAsc : Int){
-        requests = MutableLiveData(educationDao.getAllSortedByDate(isAsc))
+        requests = educationDao.getAllSortedByDate(isAsc)
         educationDao.deleteAll()
-        saveRequests(requests.value!!)
+        saveRequests(requests)
     }
 }

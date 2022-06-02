@@ -9,13 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
 import com.example.menuhomework.ui.Search.Sortings
-import com.example.menuhomework.ui.adapters.RequestRecyclerAdapter
 import com.example.menuhomework.databinding.FragmentSearchBinding
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import com.example.menuhomework.model.database.App
 import com.example.menuhomework.model.database.Request
 import com.example.menuhomework.model.database.WeatherSource
-import com.example.menuhomework.model.database.dao.WeatherDao
 import com.example.menuhomework.viewmodels.SearchViewModel
 
 
@@ -65,9 +63,6 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         //працюю з вбудованим менеджером
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView?.layoutManager = layoutManager
-
-        //робота з бд
-        WeatherSource.initDao(App.instance.db.educationDao)
 
         adapter = RequestRecyclerAdapter(requireActivity())
         initData(adapter)
