@@ -1,4 +1,4 @@
-package com.example.menuhomework.ui.Search
+package com.example.menuhomework.model.Search
 
 object Sortings {
     const val NAME = 1

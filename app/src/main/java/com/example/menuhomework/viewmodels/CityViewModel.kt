@@ -8,16 +8,8 @@ import com.example.menuhomework.viewStates.CityViewState
 class CityViewModel(private val repository: Repository = Repository) :
     BaseViewModel<Weather?, CityViewState>() {
 
-    private var pendingWeather: Weather? = null
-
     fun saveChanges(weather: Weather) {
-        pendingWeather = weather
         repository.saveWeather(weather)
-    }
-
-    override fun onCleared() {
-        pendingWeather?.let { repository.saveWeather(it) }
-
     }
 
     fun loadNote(city: String) {

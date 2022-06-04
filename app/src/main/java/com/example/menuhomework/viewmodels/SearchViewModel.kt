@@ -1,10 +1,9 @@
 package com.example.menuhomework.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.menuhomework.model.Repository
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.ui.Search.Sortings
+import com.example.menuhomework.model.Search.Sortings
 import com.example.menuhomework.viewStates.SearchViewState
 
 class SearchViewModel(

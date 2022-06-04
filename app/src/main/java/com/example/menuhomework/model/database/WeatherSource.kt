@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.menuhomework.model.providers.DataProvider
 import com.example.menuhomework.model.database.dao.WeatherDao
 
-// Вспомогательный класс, развязывающий зависимость между Room и RecyclerView
 class WeatherSource(
     private var dao: WeatherDao
 ) : DataProvider {
-    // Буфер с данными: сюда будем подкачивать данные из БД
 
     var weathers: List<Weather> = dao.getAllWeathers()
 

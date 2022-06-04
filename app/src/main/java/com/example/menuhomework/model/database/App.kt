@@ -12,10 +12,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Сохраняем объект приложения (для Singleton’а)
         instance = this
 
-        // Строим базу
         db = Room.databaseBuilder(
             applicationContext,
             WeatherDatabase::class.java,

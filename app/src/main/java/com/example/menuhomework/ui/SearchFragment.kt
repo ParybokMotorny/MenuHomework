@@ -8,11 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
-import com.example.menuhomework.ui.Search.Sortings
+import com.example.menuhomework.model.Search.Sortings
 import com.example.menuhomework.databinding.FragmentSearchBinding
-import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.model.database.WeatherSource
 import com.example.menuhomework.viewmodels.SearchViewModel
 
 class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {

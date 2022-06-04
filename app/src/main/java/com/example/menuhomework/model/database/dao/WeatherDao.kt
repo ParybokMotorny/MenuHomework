@@ -21,15 +21,12 @@ interface WeatherDao {
     @Query("SELECT * FROM weather")
     fun getAllWeathers(): List<Weather>
 
-    // Получаем данные одного студента по id
     @Query("SELECT * FROM weather WHERE id = :id")
     fun getWeatherById(id: Long): Weather
 
-    //Получаем количество записей в таблице
     @Query("SELECT COUNT() FROM weather")
     fun getCountWeathers(): Long
 
-    // видаляємо усі елемети з бази
     @Query("DELETE FROM weather")
     fun deleteAll()
 

@@ -183,7 +183,7 @@ class MapsFragment :
             .addToBackStack(null)
             .commit()
 
-        viewModel.saveChanges(weather.copyWeather())
+        //viewModel.saveChanges(weather.copyWeather())
     }
 
     private fun renderError(message: String) {
