@@ -11,17 +11,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import com.example.menuhomework.BuildConfig
 import com.example.menuhomework.R
-import com.example.menuhomework.model.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentCityBinding
-import com.example.menuhomework.model.SaveRequest
-import com.example.menuhomework.model.retrofit.model.WeatherRequest
-import com.example.menuhomework.model.retrofit.Retrofit
+import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.viewmodels.CityViewModel
+import com.google.android.material.snackbar.Snackbar
 
-// фрагмент для запитів
-class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
+class CityFragment : Fragment() {
 
     private var binding: FragmentCityBinding? = null
     private var showError: Boolean = false
@@ -31,7 +27,6 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentCityBinding.inflate(inflater, container, false)
         return binding?.root
     }
@@ -41,22 +36,29 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
         val refresh = binding?.refresh
         refresh?.setOnClickListener(clickListener)
 
-        // дістаю останній запит запит
-        loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
-
         viewModel = ViewModelProvider(this).get(CityViewModel::class.java)
+
+        viewModel.getViewState().observe(requireActivity()) { state ->
+            state.data?.let {
+                renderData(it)
+            }
+            state.error?.let {
+                renderError(it)
+            }
+        }
+
+        loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
-        // зберігаю поточнйи запит
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
         binding = null
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
-        Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
+        viewModel.loadNote(binding?.city?.text.toString())
     }
 
     private fun savePreferences(sharedPref: SharedPreferences) {
@@ -69,54 +71,42 @@ class CityFragment : Fragment(), Retrofit.OnResponseCompleted {
     }
 
     private fun loadPreferences(sharedPref: SharedPreferences) {
-        // Для получения настроек Editor не нужен: получаем их прямо из
-        // SharedPreferences
+
         val city = sharedPref.getString(CITY, null)
         binding?.city?.setText(city)
-        Retrofit(this).run(binding?.city?.text.toString(), "6b0423304b20ad534ccceecc6d3c729a")
+        viewModel.loadNote(binding?.city?.text.toString())
         showError = false
     }
 
-    // опрацьовую результат роботи ретрофіту
-    override fun onCompleted(content: WeatherRequest) {
-
-        val request = MainToRequestConverter.convert(content)
-
-        val fragment = WeatherFragment.newInstance(request)
+    private fun renderData(weather: Weather) {
+        val fragment = WeatherFragment.newInstance(weather)
 
         val imm: InputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
 
-        // фрагмент з відображенням погоди
         childFragmentManager
             .beginTransaction()
             .replace(R.id.weather_container, fragment)
             .commit()
 
-        SaveRequest.saveRequest(request, viewModel)
-        // передаю дані в актівіті
-        //listener?.onFragmentResult(content)
-
-
+        viewModel.saveChanges(weather.copyWeather())
     }
 
-    // опрацьовую помилку реторофіту
-    override fun onFail(message: String) {
-        if (showError) {
-            AlertDialog.Builder(requireContext())
-                .setTitle(message)
-                .setCancelable(false)
-                .setPositiveButton("OK")
-                { _, _ -> }
-                .create()
-                .show()
-        }
-        showError = true
+    private fun renderError(error: String) {
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(error)
+            .setCancelable(false)
+            .setPositiveButton("OK")
+            { _, _ -> }
+            .create()
+            .show()
+
+
     }
 
     companion object {
         private const val CITY = "city"
-
     }
 }

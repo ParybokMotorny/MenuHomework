@@ -4,12 +4,11 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
 import java.util.*
 
 @Entity
 @Parcelize
-data class Request(
+data class Weather(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
 
@@ -30,7 +29,7 @@ data class Request(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Request
+        other as Weather
 
         if (id != other.id) return false
 
@@ -39,5 +38,16 @@ data class Request(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    fun copyWeather() : Weather{
+        return copy(
+            id = id,
+            city = city,
+            temp = temp,
+            pressure = pressure,
+            humidity = humidity,
+            date = date
+        )
     }
 }

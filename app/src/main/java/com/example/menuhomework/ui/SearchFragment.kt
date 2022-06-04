@@ -11,24 +11,17 @@ import com.example.menuhomework.R
 import com.example.menuhomework.ui.Search.Sortings
 import com.example.menuhomework.databinding.FragmentSearchBinding
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
-import com.example.menuhomework.model.database.App
-import com.example.menuhomework.model.database.Request
+import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.model.database.WeatherSource
 import com.example.menuhomework.viewmodels.SearchViewModel
 
-
-// фрагмент з історією пошуку
 class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     private var binding: FragmentSearchBinding? = null
     private lateinit var adapter: RequestRecyclerAdapter
     private lateinit var viewModel: SearchViewModel
 
-    // дані які прийдуть з актівіті
-    private var data: MutableList<WeatherRequest> = ArrayList()
-    private lateinit var weatherSource: WeatherSource
-
-    private var sorting = Sortings.DATE
+    private var sorting = Sortings.DATEDESC
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,38 +51,31 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     private fun initList() {
         val recyclerView = binding?.recyclerList
 
-        recyclerView?.setHasFixedSize(true)//кажуть так треба писати
+        recyclerView?.setHasFixedSize(true)
 
-        //працюю з вбудованим менеджером
         val layoutManager = LinearLayoutManager(requireContext())
         recyclerView?.layoutManager = layoutManager
 
-        adapter = RequestRecyclerAdapter(requireActivity())
-        initData(adapter)
-        data = ArrayList()
+        adapter = RequestRecyclerAdapter(requireActivity(), this)
 
         adapter.itemClickListener = this
         recyclerView?.adapter = adapter
 
-        viewModel.viewState().observe(requireActivity()) { state ->
-            adapter.update(state.requests)
+        viewModel.getViewState().observe(requireActivity()) { state ->
+
+            if (state.weather == null) return@observe
+
+            val result = mutableListOf<Weather>()
+
+            for (weather in state.weather) {
+                result.add(weather)
+            }
+
+            adapter.weathers = result
         }
 
     }
 
-    // отримую дані з актівіті
-    fun receiveData(data: MutableList<WeatherRequest>) {
-        this.data = data
-    }
-
-    // передаю дані в адаптер
-    private fun initData(adapter: RequestRecyclerAdapter) {
-        for (it in data) {
-            adapter.addItem(it)
-        }
-    }
-
-    // метод для відображення діалогових вікон
     private fun showDialog(message: String, function: () -> Unit) {
         AlertDialog.Builder(requireContext())
             .setTitle(message)
@@ -107,7 +93,6 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         requireActivity().menuInflater.inflate(R.menu.main, menu)
     }
 
@@ -118,7 +103,8 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
             return true
         } else if (id == R.id.action_clear) {
             showDialog("Ви впевнені, що хочете видалити усі елементи?") {
-                adapter.clearItems()
+                viewModel.deleteAll()
+                adapter.weathers = mutableListOf()
             }
             return true
         } else if (id == R.id.sort_by_name) {
@@ -135,7 +121,7 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     }
 
     private fun saveAndSort(sort: Int) {
-        adapter.sort(sort)
+        viewModel.sort(sort)
         sorting = sort
         savePreferences()
     }
@@ -153,7 +139,7 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     private fun loadPreferences() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         sorting = sharedPref.getInt(SORT, Sortings.DATEDESC)
-        adapter.sort(sorting)
+        viewModel.sort(sorting)
     }
 
     override fun onCreateContextMenu(
@@ -169,7 +155,8 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         when (item.itemId) {
             R.id.remove_context -> {
                 showDialog("Ви впевнені, що хочете видалити цей елемент?") {
-                    adapter.removeItem(adapter.menuPosition.toInt())
+                    viewModel.deleteForId(adapter.weathers[adapter.menuPosition].id)
+                    adapter.removeItem(adapter.menuPosition)
                 }
                 return true
             }
@@ -177,7 +164,7 @@ class SearchFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         return super.onContextItemSelected(item)
     }
 
-    override fun onItemClick(view: View, element: Request) {
+    override fun onItemClick(view: View, element: Weather) {
         val fragment = WeatherFragment.newInstance(element)
 
         parentFragmentManager

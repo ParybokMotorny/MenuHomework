@@ -22,6 +22,7 @@ class App : Application() {
             "education_database"
         )
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
     }
 

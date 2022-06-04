@@ -6,18 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.menuhomework.model.database.Request
+import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.databinding.FragmentWeatherBinding
 import com.squareup.picasso.Picasso
 
 
-// фрагмент для відображення погоди
 class WeatherFragment : Fragment() {
 
-    var item: Request? = null
+    var item: Weather? = null
     private var binding: FragmentWeatherBinding? = null
 
-    private val AbsoluteZero = -273.15f
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,31 +39,29 @@ class WeatherFragment : Fragment() {
         item?.let { displayWeather(it) }
     }
 
-    // метод для відображення погоди
-    private fun displayWeather(request: Request) {
+    private fun displayWeather(weather: Weather) {
         binding?.textTemperature?.setText(
             String.format(
                 "%f2",
-                // температура приходить з кельвінах, тому треба перевести її в цельсії
-                request.temp + AbsoluteZero
+                weather.temp + ABSOLUTE_ZERO
             )
         )
         binding?.textPressure?.setText(
 
             String.format(
                 "%d",
-                request.pressure
+                weather.pressure
             )
         )
         binding?.textHumidity?.setText(
             String.format(
                 "%d",
-                request.humidity
+                weather.humidity
             )
         )
-        binding?.dateEditText?.setText(request.date.toString())
+        binding?.dateEditText?.setText(weather.date.toString())
 
-        val uri = Uri.parse("http://openweathermap.org/img/w/${request.icon}.png")
+        val uri = Uri.parse("http://openweathermap.org/img/w/${weather.icon}.png")
 
         Picasso.get()
             .load(uri)
@@ -73,12 +70,13 @@ class WeatherFragment : Fragment() {
 
     companion object {
         private const val ITEM = "item"
+        private const val ABSOLUTE_ZERO = -273.15f
 
         @JvmStatic
-        fun newInstance(request: Request) =
+        fun newInstance(weather: Weather) =
             WeatherFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(ITEM, request)
+                    putParcelable(ITEM, weather)
                 }
             }
     }

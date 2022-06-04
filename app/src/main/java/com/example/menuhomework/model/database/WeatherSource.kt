@@ -2,69 +2,43 @@ package com.example.menuhomework.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.menuhomework.model.providers.DataProvider
 import com.example.menuhomework.model.database.dao.WeatherDao
 
 // Вспомогательный класс, развязывающий зависимость между Room и RecyclerView
-object WeatherSource{
+class WeatherSource(
+    private var dao: WeatherDao
+) : DataProvider {
     // Буфер с данными: сюда будем подкачивать данные из БД
 
-    lateinit var requests: List<Request>
+    var weathers: List<Weather> = dao.getAllWeathers()
 
-    private lateinit var educationDao: WeatherDao
+    override fun subscribeToAllWeathers(): LiveData<List<Weather>>
+        = MutableLiveData(dao.getAllWeathers())
 
-    fun initDao(dao: WeatherDao){
-        educationDao = dao
-        requests = dao.getAllRequests()
+
+    override fun getWeathersById(id: Long): LiveData<Weather>
+        = MutableLiveData(dao.getWeatherById(id))
+
+
+    override fun saveWeathers(weather: Weather): LiveData<Long>
+        = MutableLiveData(dao.insertWeather(weather))
+
+
+    override fun deleteWeatherById(id: Long) {
+        dao.deleteWeatherById(id)
     }
 
-    // Загружаем студентов в буфер
-    private fun loadRequests() {
-        requests = educationDao.getAllRequests()
+    override fun deleteAll() {
+        dao.deleteAll()
     }
 
-    fun saveRequests(req: List<Request>){
-        for(x in req){
-            educationDao.insertRequest(x)
-        }
-    }
+    override fun getAllSortedByName(isAsc: Int): LiveData<List<Weather>> =
+        MutableLiveData(dao.getAllSortedByName(isAsc))
 
-    // Получаем количество записей
-    val countRequests: Long
-        get() = educationDao.getCountRequests()
 
-    // Добавляем студента
-    fun addRequest(request: Request) {
-        val id = educationDao.insertRequest(request)
-        loadRequests()
-    }
+    override fun getAllSortedByDate(isAsc: Int): LiveData<List<Weather>> =
+        MutableLiveData(dao.getAllSortedByDate(isAsc))
 
-    // Заменяем студента
-    fun updateRequest(weather: Request) {
-        educationDao.updateRequest(weather)
-        loadRequests()
-    }
 
-    // Удаляем студента из базы
-    fun removeRequest(id: Long) {
-        educationDao.deleteRequestById(id)
-        loadRequests()
-    }
-
-    // видаляємо всіх студентів
-    fun clearRequests() {
-        educationDao.deleteAll()
-        loadRequests()
-    }
-
-    fun sortByName(isAsc : Int){
-        requests = educationDao.getAllSortedByName(isAsc)
-        educationDao.deleteAll()
-        saveRequests(requests)
-    }
-
-    fun sortByDate(isAsc : Int){
-        requests = educationDao.getAllSortedByDate(isAsc)
-        educationDao.deleteAll()
-        saveRequests(requests)
-    }
 }

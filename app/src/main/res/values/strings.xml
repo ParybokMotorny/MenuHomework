@@ -40,4 +40,6 @@
     <string name="sort_by_date_descending">Sort by date descending</string>
     <string name="position">Отримати погоду по вашій позиції</string>
     <string name="maps">Maps</string>
+    <string name="ok_bth_title">OK</string>
+    <string name="current_position">Current position</string>
 </resources>

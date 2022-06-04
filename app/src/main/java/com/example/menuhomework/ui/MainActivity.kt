@@ -12,10 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.menuhomework.R
-import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import com.example.menuhomework.databinding.ActivityMainBinding
+import com.example.menuhomework.model.Repository
 import com.example.menuhomework.model.database.App
-import com.example.menuhomework.model.database.WeatherSource
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity :
@@ -23,18 +22,17 @@ class MainActivity :
     NavigationView.OnNavigationItemSelectedListener {
     private var binding: ActivityMainBinding? = null
 
-    // історія пошуку, яку я з CityFragment передаю у SearchFragment
-    private var data: MutableList<WeatherRequest> = ArrayList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
         // додаю drawerMenu для переходу між запиом та історією пошуку
+
         val toolbar = initToolbar()
         initDrawer(toolbar)
 
-        WeatherSource.initDao(App.instance.db.educationDao)
+        Repository.initProvider(App.instance.db.weatherDao)
 
         // якщо це перше входження в додаток, то показую фрагмент з запитом
         if (savedInstanceState == null)
@@ -66,16 +64,10 @@ class MainActivity :
                 replaceFragment(CityFragment())
             }
             R.id.nav_search -> {
-                val fragment = SearchFragment()
-
-                // передаю історію пошуку у відповідний фрагмент
-                fragment.receiveData(data)
-                data = ArrayList()
-
                 val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 
-                replaceFragment(fragment)
+                replaceFragment(SearchFragment())
             }
             R.id.nav_gps -> {
                 replaceFragment(MapsFragment())
@@ -86,7 +78,6 @@ class MainActivity :
         return true
     }
 
-    // метод для створення фрагментів
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()

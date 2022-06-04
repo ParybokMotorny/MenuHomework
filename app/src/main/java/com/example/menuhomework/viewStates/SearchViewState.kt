@@ -1,8 +1,8 @@
 package com.example.menuhomework.viewStates
 
-import com.example.menuhomework.model.database.Request
+import com.example.menuhomework.model.database.Weather
 
 class SearchViewState(
-    val notes: List<Request>? = null,
-    error: Throwable? = null
-) : BaseViewState<List<Request>?>(notes, error)
+    val weather: List<Weather>? = null,
+    error: String? = null
+) : BaseViewState<List<Weather>?>(weather, error)

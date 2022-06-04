@@ -1,8 +1,10 @@
 package com.example.menuhomework.model.retrofit.model
 
+import com.example.menuhomework.model.database.Weather
 import java.io.Serializable
+import java.util.*
 
-class WeatherRequest: Serializable {
+class WeatherRequest : Serializable {
 
     var coord = Coord()
 
@@ -27,5 +29,16 @@ class WeatherRequest: Serializable {
     var name: String? = null
 
     var cod = 0
+
+    fun convertToRequest(): Weather {
+        return Weather(
+            date = Date(),
+            city = name,
+            humidity = main.humidity,
+            pressure = main.pressure,
+            temp = main.temp,
+            icon = weather[0].icon
+        )
+    }
 }
 

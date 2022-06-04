@@ -1,5 +1,6 @@
 package com.example.menuhomework.model.retrofit
 
+import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.model.retrofit.interfaces.OpenWeather
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import retrofit2.Call
@@ -9,23 +10,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 open class Retrofit(
-    private var listener: OnResponseCompleted
+    private val onCompleted: (Weather) -> Unit,
+    private val onFail: (String) -> Unit
 ) {
 
     private var openWeather: OpenWeather? = null
 
-    init{
+    init {
         initRetrofit()
     }
 
-    fun run(city: String, keyApi: String){
+    fun run(city: String, keyApi: String) {
         requestRetrofit(
             city,
             keyApi
         )
     }
 
-    fun run(latitude: Float, longtitude: Float, keyApi: String){
+    fun run(latitude: Float, longtitude: Float, keyApi: String) {
         requestRetrofit(
             latitude,
             longtitude,
@@ -51,26 +53,20 @@ open class Retrofit(
             ?.enqueue(callback)
     }
 
-    var callback = object : Callback<WeatherRequest?> {
+    private var callback = object : Callback<WeatherRequest?> {
         override fun onResponse(
             call: Call<WeatherRequest?>,
             response: Response<WeatherRequest?>
         ) {
             response.body()?.let {
-                listener.onCompleted(it)
-            }?:run{
-                listener.onFail("This city does not exist")
+                onCompleted(it.convertToRequest())
+            } ?: run {
+                onFail("This city does not exist")
             }
         }
 
         override fun onFailure(call: Call<WeatherRequest?>, t: Throwable) {
-            listener.onFail("Can`t connect to server. Check your Internet connection")
+            onFail("Can`t connect to server. Check your Internet connection")
         }
-    }
-
-    // інтерфейс для опрацювання результату роботи ретрофіту
-    interface OnResponseCompleted {
-        fun onCompleted(content: WeatherRequest)
-        fun onFail(message: String)
     }
 }

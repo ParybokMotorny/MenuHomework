@@ -1,6 +1,6 @@
 package com.example.menuhomework.viewStates
 
-import com.example.menuhomework.model.database.Request
+import com.example.menuhomework.model.database.Weather
 
-class CityViewState(note: Request? = null, error: Throwable? = null) :
-    BaseViewState<Request?>(note, error)
+class CityViewState(weather: Weather? = null, error: String? = null) :
+    BaseViewState<Weather?>(weather, error)

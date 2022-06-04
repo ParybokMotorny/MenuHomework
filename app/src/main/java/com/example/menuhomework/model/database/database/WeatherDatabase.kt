@@ -5,13 +5,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.menuhomework.model.database.dao.WeatherDao
 import com.example.menuhomework.model.database.converters.DateConverter
-import com.example.menuhomework.model.database.Request
+import com.example.menuhomework.model.database.Weather
 
 @Database(
-    entities = [Request::class],
-    version = 1
+    entities = [Weather::class],
+    version = 2
 )
 @TypeConverters(DateConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {
-    abstract val educationDao: WeatherDao
+    abstract val weatherDao: WeatherDao
 }

@@ -5,7 +5,7 @@ import com.example.menuhomework.model.RequestResult
 import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.viewStates.CityViewState
 
-class CityViewModel(private val repository: Repository = Repository) :
+class MapsViewModel(private val repository: Repository = Repository) :
     BaseViewModel<Weather?, CityViewState>() {
 
     private var pendingWeather: Weather? = null
@@ -20,8 +20,8 @@ class CityViewModel(private val repository: Repository = Repository) :
 
     }
 
-    fun loadNote(city: String) {
-        repository.request(city).observeForever { requestResult ->
+    fun loadNote(latitude: Float, longtitude: Float) {
+        repository.request(latitude, longtitude).observeForever { requestResult ->
             if (requestResult == null) return@observeForever
 
             when (requestResult) {

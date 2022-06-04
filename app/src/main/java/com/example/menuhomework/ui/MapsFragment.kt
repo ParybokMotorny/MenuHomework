@@ -16,14 +16,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.menuhomework.BuildConfig
 import com.example.menuhomework.R
-import com.example.menuhomework.model.database.converters.MainToRequestConverter
 import com.example.menuhomework.databinding.FragmentMapsBinding
-import com.example.menuhomework.model.SaveRequest
 import com.example.menuhomework.model.retrofit.Retrofit
-import com.example.menuhomework.model.retrofit.model.WeatherRequest
-import com.example.menuhomework.viewmodels.CityViewModel
+import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.viewmodels.MapsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -35,15 +32,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class MapsFragment :
     Fragment(),
-    OnMapReadyCallback,
-    Retrofit.OnResponseCompleted {
+    OnMapReadyCallback {
 
     private var binding: FragmentMapsBinding? = null
     private var currentMarker: Marker? = null
     private var mMap: GoogleMap? = null
     private var currentPosition = LatLng(-34.0, 151.0)
 
-    private lateinit var viewModel: CityViewModel
+    private lateinit var viewModel: MapsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,11 +52,19 @@ class MapsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(CityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MapsViewModel::class.java)
+
+        viewModel.getViewState().observe(requireActivity()) { state ->
+            state.data?.let {
+                renderData(it)
+            }
+            state.error?.let {
+                renderError(it)
+            }
+        }
 
         currentPosition = loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -71,20 +75,20 @@ class MapsFragment :
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
         currentMarker =
-            mMap?.addMarker(MarkerOptions().position(currentPosition).title("Текущая позиция"))!!
+            mMap?.addMarker(
+                MarkerOptions().position(currentPosition)
+                    .title(getString(R.string.current_position))
+            )!!
         mMap?.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
 
         mMap?.setOnMapLongClickListener {
             savePreferences(requireActivity().getPreferences(Context.MODE_PRIVATE), currentPosition)
 
-            Retrofit(this)
-                .run(
-                    it.latitude.toFloat(),
-                    it.longitude.toFloat(),
-                    "6b0423304b20ad534ccceecc6d3c729a"
-                )
+            viewModel.loadNote(
+                it.latitude.toFloat(),
+                it.longitude.toFloat(),
+            )
         }
     }
 
@@ -98,8 +102,6 @@ class MapsFragment :
     }
 
     private fun loadPreferences(sharedPref: SharedPreferences): LatLng {
-        // Для получения настроек Editor не нужен: получаем их прямо из
-        // SharedPreferences
         val lat = sharedPref.getFloat(LAT, 0f)
         val lon = sharedPref.getFloat(LON, 0f)
 
@@ -107,8 +109,6 @@ class MapsFragment :
     }
 
     private fun requestPermissions() {
-        // Проверим, есть ли Permission’ы, и если их нет, запрашиваем их у
-        // пользователя
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -118,18 +118,15 @@ class MapsFragment :
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Запрашиваем координаты
             requestLocation()
         } else {
-            // Permission’ов нет, запрашиваем их у пользователя
             requestLocationPermissions()
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun requestLocation() {
-        // Если Permission’а всё- таки нет, просто выходим: приложение не имеет
-        // смысла
+
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -139,25 +136,18 @@ class MapsFragment :
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) return
-        // Получаем менеджер геолокаций
+
         val locationManager = requireActivity()
             .getSystemService(LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         criteria.accuracy = Criteria.ACCURACY_COARSE
 
-        // Получаем наиболее подходящий провайдер геолокации по критериям.
-        // Но определить, какой провайдер использовать, можно и самостоятельно.
-        // В основном используются LocationManager.GPS_PROVIDER или
-        // LocationManager.NETWORK_PROVIDER, но можно использовать и
-        // LocationManager.PASSIVE_PROVIDER - для получения координат в
-        // пассивном режиме
         val provider = locationManager.getBestProvider(criteria, true)
         if (provider != null) {
-            // Будем получать геоположение через каждые 10 секунд или каждые
-            // 10 метров
+
             locationManager.requestLocationUpdates(provider, 10000, 10f) { location ->
-                val lat = location.latitude // Широта
-                val lng = location.longitude // Долгота
+                val lat = location.latitude
+                val lng = location.longitude
                 currentPosition = LatLng(lat, lng)
 
                 currentMarker?.position = currentPosition
@@ -166,14 +156,12 @@ class MapsFragment :
         }
     }
 
-    // Запрашиваем Permission’ы для геолокации
     private fun requestLocationPermissions() {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
                 requireActivity(),
                 Manifest.permission.CALL_PHONE
             )
         ) {
-            // Запрашиваем эти два Permission’а у пользователя
             ActivityCompat.requestPermissions(
                 requireActivity(), arrayOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -185,27 +173,20 @@ class MapsFragment :
     }
 
 
-    override fun onCompleted(content: WeatherRequest) {
-        val request = MainToRequestConverter.convert(content)
+    private fun renderData(weather: Weather) {
 
-        val fragment = WeatherFragment.newInstance(request)
+        val fragment = WeatherFragment.newInstance(weather)
 
-//        val imm: InputMethodManager =
-//            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-
-        // фрагмент з відображенням погоди
         parentFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
 
-        // передаю дані в актівіті
-        SaveRequest.saveRequest(request, viewModel)
+        viewModel.saveChanges(weather.copyWeather())
     }
 
-    override fun onFail(message: String) {
+    private fun renderError(message: String) {
 
         AlertDialog.Builder(requireContext())
             .setTitle(message)
