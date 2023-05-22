@@ -42,10 +42,10 @@ class SearchFragment : Fragment() {
                 renderData(it)
             }
             state.error?.let {
-                renderError(it)
+                if(showError)
+                    renderError(it)
             }
         }
-
         loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
@@ -57,23 +57,21 @@ class SearchFragment : Fragment() {
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
+        showError = true
         viewModel.loadNote(binding?.city?.text.toString())
     }
 
     private fun savePreferences(sharedPref: SharedPreferences) {
         val editor = sharedPref.edit()
-
         editor.putString(CITY, binding?.city?.text.toString())
-        showError = true
-
         editor.apply()
     }
 
     private fun loadPreferences(sharedPref: SharedPreferences) {
         val city = sharedPref.getString(CITY, null)
         binding?.city?.setText(city)
-        viewModel.loadNote(binding?.city?.text.toString())
         showError = false
+        viewModel.loadNote(binding?.city?.text.toString())
     }
 
     private fun renderData(weather: Weather) {

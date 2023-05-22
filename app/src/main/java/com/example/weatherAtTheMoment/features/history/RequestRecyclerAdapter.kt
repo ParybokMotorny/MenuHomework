@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherAtTheMoment.R
-import com.example.weatherAtTheMoment.databinding.ItemBinding
+import com.example.weatherAtTheMoment.databinding.HistoryItemBinding
 import com.example.weatherAtTheMoment.model.entity.db.Weather
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +33,7 @@ class RequestRecyclerAdapter(
         viewType: Int
     ): ViewHolder {
         val v: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item, parent, false)
+            .inflate(R.layout.history_item, parent, false)
 
         return ViewHolder(v)
     }
@@ -61,7 +61,7 @@ class RequestRecyclerAdapter(
 
     class ViewHolder(var cardView: View) : RecyclerView.ViewHolder(cardView) {
 
-        private var ui: ItemBinding = ItemBinding.bind(itemView)
+        private var ui: HistoryItemBinding = HistoryItemBinding.bind(itemView)
 
         fun setOnClickListener(listener: OnItemClickListener, weather: Weather) {
             this.cardView.setOnClickListener {

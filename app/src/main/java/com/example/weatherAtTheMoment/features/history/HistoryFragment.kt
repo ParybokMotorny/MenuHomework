@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherAtTheMoment.R
+import com.example.weatherAtTheMoment.databinding.FragmentHistoryBinding
 import com.example.weatherAtTheMoment.features.search.Sortings
-import com.example.weatherAtTheMoment.databinding.FragmentSearchBinding
 import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.features.weather.WeatherFragment
 
 class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
-    private var binding: FragmentSearchBinding? = null
+    private var binding: FragmentHistoryBinding? = null
     private lateinit var adapter: RequestRecyclerAdapter
     private lateinit var viewModel: HistoryViewModel
 
@@ -25,7 +25,7 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding = FragmentHistoryBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
         registerForContextMenu(binding?.recyclerList as View)
         return binding?.root
@@ -71,10 +71,10 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         AlertDialog.Builder(requireContext())
             .setTitle(message)
             .setCancelable(false)
-            .setNegativeButton("Ні")
+            .setNegativeButton("No")
             { _, _ ->
             }
-            .setPositiveButton("Так")
+            .setPositiveButton("Yes")
             { _, _ ->
                 function()
             }
@@ -84,7 +84,7 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        requireActivity().menuInflater.inflate(R.menu.main, menu)
+        requireActivity().menuInflater.inflate(R.menu.history_options_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -136,13 +136,13 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        requireActivity().menuInflater.inflate(R.menu.context_menu, menu)
+        requireActivity().menuInflater.inflate(R.menu.history_long_click_menu, menu)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove_context -> {
-                showDialog("Ви впевнені, що хочете видалити цей елемент?") {
+                showDialog("Are you sure you want to delete this element?") {
                     viewModel.deleteForId(adapter.weathers[adapter.menuPosition].id)
                     adapter.removeItem(adapter.menuPosition)
                 }
