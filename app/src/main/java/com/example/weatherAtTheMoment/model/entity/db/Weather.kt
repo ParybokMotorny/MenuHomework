@@ -1,4 +1,4 @@
-package com.example.weatherAtTheMoment.model.database
+package com.example.weatherAtTheMoment.model.entity.db
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -40,7 +40,7 @@ data class Weather(
         return id.hashCode()
     }
 
-    fun copyWeather() : Weather{
+    fun copyWeather() : Weather {
         return copy(
             id = id,
             city = city,

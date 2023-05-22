@@ -1,4 +1,4 @@
-package com.example.weatherAtTheMoment.model.database
+package com.example.weatherAtTheMoment
 
 import android.app.Application
 import androidx.room.Room

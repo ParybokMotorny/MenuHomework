@@ -1,11 +1,12 @@
 package com.example.weatherAtTheMoment.model
 
 import androidx.lifecycle.LiveData
-import com.example.weatherAtTheMoment.model.providers.DataProvider
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.database.DataProvider
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.model.database.WeatherSource
 import com.example.weatherAtTheMoment.model.database.dao.WeatherDao
-import com.example.weatherAtTheMoment.model.retrofit.RetrofitProvider
+import com.example.weatherAtTheMoment.model.api.RetrofitProvider
+import com.example.weatherAtTheMoment.model.entity.response.ResponseEntity
 
 object Repository {
 
@@ -30,9 +31,9 @@ object Repository {
 
     fun getAllSortedByDate(isAsc: Int) = dataProvider.getAllSortedByDate(isAsc)
 
-    fun request(city: String): LiveData<RequestResult> =
+    fun request(city: String): LiveData<ResponseEntity> =
         internetProvider.request(city)
 
-    fun request(latitude: Float, longtitude: Float): LiveData<RequestResult> =
+    fun request(latitude: Float, longtitude: Float): LiveData<ResponseEntity> =
         internetProvider.request(latitude, longtitude)
 }

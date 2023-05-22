@@ -3,8 +3,8 @@ package com.example.weatherAtTheMoment.features.history
 import androidx.lifecycle.Observer
 import com.example.weatherAtTheMoment.base.BaseViewModel
 import com.example.weatherAtTheMoment.model.Repository
-import com.example.weatherAtTheMoment.model.database.Weather
-import com.example.weatherAtTheMoment.model.Search.Sortings
+import com.example.weatherAtTheMoment.model.entity.db.Weather
+import com.example.weatherAtTheMoment.features.search.Sortings
 
 class HistoryViewModel(
     private val repository: Repository = Repository

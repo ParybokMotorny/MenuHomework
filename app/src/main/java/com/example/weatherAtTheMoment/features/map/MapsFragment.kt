@@ -18,7 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherAtTheMoment.R
 import com.example.weatherAtTheMoment.databinding.FragmentMapsBinding
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.features.weather.WeatherFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

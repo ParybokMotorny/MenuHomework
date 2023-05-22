@@ -1,12 +1,12 @@
 package com.example.weatherAtTheMoment.features.search
 
 import com.example.weatherAtTheMoment.model.Repository
-import com.example.weatherAtTheMoment.model.RequestResult
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.response.ResponseEntity
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.base.BaseViewModel
 
-class CityViewModel(private val repository: Repository = Repository) :
-    BaseViewModel<Weather?, CityViewState>() {
+class SearchViewModel(private val repository: Repository = Repository) :
+    BaseViewModel<Weather?, SearchViewState>() {
 
     fun saveChanges(weather: Weather) {
         repository.saveWeather(weather)
@@ -17,12 +17,12 @@ class CityViewModel(private val repository: Repository = Repository) :
             if (requestResult == null) return@observeForever
 
             when (requestResult) {
-                is RequestResult.Success<*> -> {
+                is ResponseEntity.Success<*> -> {
                     viewStateLiveData.value =
-                        CityViewState(weather = requestResult.data as? Weather)
+                        SearchViewState(weather = requestResult.data as? Weather)
                 }
                 else -> viewStateLiveData.value =
-                    CityViewState(error = (requestResult as RequestResult.Error).error)
+                    SearchViewState(error = (requestResult as ResponseEntity.Error).error)
             }
         }
     }

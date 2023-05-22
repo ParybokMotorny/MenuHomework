@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherAtTheMoment.R
 import com.example.weatherAtTheMoment.databinding.ItemBinding
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RequestRecyclerAdapter(
     private val activity: Activity,
@@ -52,7 +54,6 @@ class RequestRecyclerAdapter(
     }
 
 
-
     fun removeItem(position: Int) {
         weathers.removeAt(position)
         notifyItemRemoved(position)
@@ -72,7 +73,9 @@ class RequestRecyclerAdapter(
 
         fun bind(weather: Weather) {
             ui.textRequestCity.text = weather.city
-            ui.textRequestDate.text = weather.date.toString()
+            val dateFormat = SimpleDateFormat("MM/dd HH:mm", Locale.getDefault())
+            val formattedDate = weather.date?.let { dateFormat.format(it) }
+            ui.textRequestDate.text = formattedDate
         }
     }
 

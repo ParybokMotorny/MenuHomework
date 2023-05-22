@@ -6,16 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.databinding.FragmentWeatherBinding
 import com.squareup.picasso.Picasso
 
 
 class WeatherFragment : Fragment() {
-
     var item: Weather? = null
     private var binding: FragmentWeatherBinding? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,4 +1,4 @@
-package com.example.weatherAtTheMoment.model.Search
+package com.example.weatherAtTheMoment.features.search
 
 object Sortings {
     const val NAME = 1

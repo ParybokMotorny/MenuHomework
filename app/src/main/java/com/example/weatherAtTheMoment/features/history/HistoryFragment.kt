@@ -8,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherAtTheMoment.R
-import com.example.weatherAtTheMoment.model.Search.Sortings
+import com.example.weatherAtTheMoment.features.search.Sortings
 import com.example.weatherAtTheMoment.databinding.FragmentSearchBinding
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.features.weather.WeatherFragment
 
-class HistoryFagment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
+class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     private var binding: FragmentSearchBinding? = null
     private lateinit var adapter: RequestRecyclerAdapter
@@ -33,11 +33,8 @@ class HistoryFagment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
-
         initList()
-
         loadPreferences()
     }
 
@@ -60,15 +57,11 @@ class HistoryFagment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         recyclerView?.adapter = adapter
 
         viewModel.getViewState().observe(requireActivity()) { state ->
-
             if (state.weather == null) return@observe
-
             val result = mutableListOf<Weather>()
-
             for (weather in state.weather) {
                 result.add(weather)
             }
-
             adapter.weathers = result
         }
 
@@ -100,7 +93,7 @@ class HistoryFagment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
         if (id == R.id.action_settings) {
             return true
         } else if (id == R.id.action_clear) {
-            showDialog("Ви впевнені, що хочете видалити усі елементи?") {
+            showDialog("Are you sure that you want to delete all elements?") {
                 viewModel.deleteAll()
                 adapter.weathers = mutableListOf()
             }
@@ -126,11 +119,8 @@ class HistoryFagment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
 
     private fun savePreferences() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-
         val editor = sharedPref.edit()
-
         editor.putInt(SORT, sorting)
-
         editor.apply()
     }
 

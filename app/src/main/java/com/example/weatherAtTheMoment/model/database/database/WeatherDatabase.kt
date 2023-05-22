@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.weatherAtTheMoment.model.database.dao.WeatherDao
 import com.example.weatherAtTheMoment.model.database.converters.DateConverter
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 
 @Database(
     entities = [Weather::class],

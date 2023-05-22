@@ -1,4 +1,4 @@
-package com.example.weatherAtTheMoment.model.retrofit.model
+package com.example.weatherAtTheMoment.model.entity.api
 
 
 class Weather {

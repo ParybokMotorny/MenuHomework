@@ -13,11 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.weatherAtTheMoment.R
 import com.example.weatherAtTheMoment.databinding.ActivityMainBinding
-import com.example.weatherAtTheMoment.features.history.HistoryFagment
+import com.example.weatherAtTheMoment.features.history.HistoryFragment
 import com.example.weatherAtTheMoment.features.map.MapsFragment
-import com.example.weatherAtTheMoment.features.search.CityFragment
+import com.example.weatherAtTheMoment.features.search.SearchFragment
 import com.example.weatherAtTheMoment.model.Repository
-import com.example.weatherAtTheMoment.model.database.App
+import com.example.weatherAtTheMoment.App
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity :
@@ -39,7 +39,7 @@ class MainActivity :
         // if this is the first entry into the application,
         // then I show a fragment with a request
         if (savedInstanceState == null)
-            replaceFragment(CityFragment())
+            replaceFragment(SearchFragment())
     }
 
     override fun onDestroy() {
@@ -64,13 +64,13 @@ class MainActivity :
 
         when (id) {
             R.id.nav_home -> {
-                replaceFragment(CityFragment())
+                replaceFragment(SearchFragment())
             }
             R.id.nav_search -> {
                 val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 
-                replaceFragment(HistoryFagment())
+                replaceFragment(HistoryFragment())
             }
             R.id.nav_gps -> {
                 replaceFragment(MapsFragment())

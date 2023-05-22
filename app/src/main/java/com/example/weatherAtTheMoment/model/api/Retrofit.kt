@@ -1,8 +1,7 @@
-package com.example.weatherAtTheMoment.model.retrofit
+package com.example.weatherAtTheMoment.model.api
 
-import com.example.weatherAtTheMoment.model.database.Weather
-import com.example.weatherAtTheMoment.model.retrofit.interfaces.OpenWeather
-import com.example.weatherAtTheMoment.model.retrofit.model.WeatherRequest
+import com.example.weatherAtTheMoment.model.entity.db.Weather
+import com.example.weatherAtTheMoment.model.entity.api.WeatherRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

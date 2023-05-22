@@ -2,8 +2,8 @@ package com.example.weatherAtTheMoment.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.weatherAtTheMoment.model.providers.DataProvider
 import com.example.weatherAtTheMoment.model.database.dao.WeatherDao
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 
 class WeatherSource(
     private var dao: WeatherDao

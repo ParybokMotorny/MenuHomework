@@ -1,7 +1,7 @@
 package com.example.weatherAtTheMoment.model.database.dao
 
 import androidx.room.*
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 
 @Dao
 interface WeatherDao {

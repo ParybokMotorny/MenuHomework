@@ -13,14 +13,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherAtTheMoment.R
 import com.example.weatherAtTheMoment.databinding.FragmentCityBinding
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import com.example.weatherAtTheMoment.features.weather.WeatherFragment
 
-class CityFragment : Fragment() {
+class SearchFragment : Fragment() {
 
     private var binding: FragmentCityBinding? = null
     private var showError: Boolean = false
-    private lateinit var viewModel: CityViewModel
+    private lateinit var viewModel: SearchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +35,7 @@ class CityFragment : Fragment() {
         val refresh = binding?.refresh
         refresh?.setOnClickListener(clickListener)
 
-        viewModel = ViewModelProvider(this).get(CityViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
         viewModel.getViewState().observe(requireActivity()) { state ->
             state.data?.let {

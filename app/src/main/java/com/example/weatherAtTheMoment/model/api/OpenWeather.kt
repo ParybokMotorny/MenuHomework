@@ -1,6 +1,6 @@
-package com.example.weatherAtTheMoment.model.retrofit.interfaces
+package com.example.weatherAtTheMoment.model.api
 
-import com.example.weatherAtTheMoment.model.retrofit.model.WeatherRequest
+import com.example.weatherAtTheMoment.model.entity.api.WeatherRequest
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

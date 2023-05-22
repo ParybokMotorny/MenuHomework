@@ -1,6 +1,6 @@
-package com.example.weatherAtTheMoment.model.retrofit.model
+package com.example.weatherAtTheMoment.model.entity.api
 
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 import java.io.Serializable
 import java.util.*
 

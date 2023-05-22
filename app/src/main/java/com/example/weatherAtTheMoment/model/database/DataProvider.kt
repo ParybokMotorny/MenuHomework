@@ -1,7 +1,7 @@
-package com.example.weatherAtTheMoment.model.providers
+package com.example.weatherAtTheMoment.model.database
 
 import androidx.lifecycle.LiveData
-import com.example.weatherAtTheMoment.model.database.Weather
+import com.example.weatherAtTheMoment.model.entity.db.Weather
 
 interface DataProvider {
 
