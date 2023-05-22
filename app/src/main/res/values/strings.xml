@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MenuHomework</string>
+    <string name="app_name">WeatherAtTheMoment</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -19,14 +19,12 @@
     <string name="clear">Clear</string>
     <string name="search">Search</string>
     <string name="communicate">Communicate</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="refresh">Обновити</string>
-    <string name="city">Місто</string>
-    <string name="temperature">Температура</string>
-    <string name="pressure">Тиск</string>
-    <string name="humidity">Вологість повітря</string>
+    <string name="refresh">Refresh</string>
+    <string name="city">City</string>
+    <string name="temperature">Temperature</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
     <string name="search_history">Search history</string>
 
     <string name="hint_enter_password">Enter Password</string>
@@ -38,7 +36,7 @@
     <string name="sort_by_date">Sort by date</string>
     <string name="sort_by_name_descending">Sort by name descending</string>
     <string name="sort_by_date_descending">Sort by date descending</string>
-    <string name="position">Отримати погоду по вашій позиції</string>
+    <string name="position">Get the weather by your position</string>
     <string name="maps">Maps</string>
     <string name="ok_bth_title">OK</string>
     <string name="current_position">Current position</string>
