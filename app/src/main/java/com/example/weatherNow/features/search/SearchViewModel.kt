@@ -1,0 +1,29 @@
+package com.example.weatherNow.features.search
+
+import com.example.weatherNow.model.Repository
+import com.example.weatherNow.model.entity.response.ResponseEntity
+import com.example.weatherNow.model.entity.db.WeatherEntity
+import com.example.weatherNow.base.BaseViewModel
+
+class SearchViewModel(private val repository: Repository = Repository) :
+    BaseViewModel<WeatherEntity?, SearchViewState>() {
+
+    fun saveChanges(weather: WeatherEntity) {
+        repository.saveWeather(weather)
+    }
+
+    fun loadNote(city: String) {
+        repository.request(city).observeForever { requestResult ->
+            if (requestResult == null) return@observeForever
+
+            when (requestResult) {
+                is ResponseEntity.Success<*> -> {
+                    viewStateLiveData.value =
+                        SearchViewState(weather = requestResult.data as? WeatherEntity)
+                }
+                else -> viewStateLiveData.value =
+                    SearchViewState(error = (requestResult as ResponseEntity.Error).error)
+            }
+        }
+    }
+}

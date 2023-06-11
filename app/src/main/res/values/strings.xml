@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WeatherAtTheMoment</string>
+    <string name="app_name">WeatherNow</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -39,6 +39,9 @@
     <string name="sort_by_date">Sort by date</string>
     <string name="sort_by_name_descending">Sort by name descending</string>
     <string name="sort_by_date_descending">Sort by date descending</string>
+    <string name="feels_like">Feels like</string>
+    <string name="wind_speed">Wind speed</string>
+
     <!--    History fragment-->
 
     <!--    Maps fragment-->

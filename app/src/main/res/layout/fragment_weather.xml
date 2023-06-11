@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".features.weather.WeatherFragment"
-    android:orientation="vertical">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".features.weather.WeatherFragment">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/description"
+        style="@style/TextViewStyle"
+        android:layout_column="1"
+        android:layout_marginStart="@dimen/default_margin"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        tools:text="Overcast clouds" />
 
     <TableLayout
         android:id="@+id/tableLayout"
@@ -21,7 +33,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/description">
 
         <TableRow
             android:layout_width="match_parent"
@@ -29,23 +41,40 @@
 
             <TextView
                 android:id="@+id/textViewTemperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/temperature" />
 
-            <EditText
-                android:id="@+id/textTemperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="textPersonName"
-                android:text=""
-                android:textColor="@color/colorPrimaryDark" />
+            <TextView
+                android:id="@+id/temperature"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                android:layout_marginStart="@dimen/default_margin"
+                tools:text="11" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
+                android:layout_marginStart="@dimen/default_margin"
+                android:text="@string/c" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:text="@string/feels_like" />
+
+            <TextView
+                android:id="@+id/feelsLike"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                android:layout_marginStart="@dimen/default_margin"
+                tools:text="11" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_marginStart="@dimen/default_margin"
                 android:text="@string/c" />
         </TableRow>
 
@@ -55,19 +84,14 @@
 
             <TextView
                 android:id="@+id/textViewPressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/pressure" />
 
-            <EditText
-                android:id="@+id/textPressure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="textPersonName"
-                android:text=""
-                android:textColor="@color/colorPrimaryDark" />
+            <TextView
+                android:id="@+id/pressure"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                tools:text="11" />
         </TableRow>
 
         <TableRow
@@ -76,19 +100,14 @@
 
             <TextView
                 android:id="@+id/textViewHumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
                 android:text="@string/humidity" />
 
-            <EditText
-                android:id="@+id/textHumidity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="textPersonName"
-                android:text=""
-                android:textColor="@color/colorPrimaryDark" />
+            <TextView
+                android:id="@+id/humidity"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                tools:text="11" />
         </TableRow>
 
         <TableRow
@@ -96,21 +115,32 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TextViewStyle"
+                android:text="@string/wind_speed" />
+
+            <TextView
+                android:id="@+id/wind_speed"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                tools:text="11" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/date_textView"
+                style="@style/TextViewStyle"
                 android:text="@string/date_of_request" />
 
-            <EditText
-                android:id="@+id/dateEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:enabled="false"
-                android:inputType="datetime"
-                android:text=""
-                android:textColor="@color/colorPrimaryDark" />
+            <TextView
+                android:id="@+id/date"
+                style="@style/TextViewStyle"
+                android:layout_column="1"
+                tools:text="11" />
         </TableRow>
+
     </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
