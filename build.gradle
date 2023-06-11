@@ -9,16 +9,3 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-task customTask {
-    doLast {
-        def properties = new Properties()
-
-        def localPropertiesFile = project.rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            properties.load(localPropertiesFile.newDataInputStream())
-        }
-
-        // Use the properties object as needed
-    }
-}

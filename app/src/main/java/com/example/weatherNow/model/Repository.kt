@@ -7,9 +7,13 @@ import com.example.weatherNow.model.database.WeatherSource
 import com.example.weatherNow.model.database.dao.WeatherDao
 import com.example.weatherNow.model.api.RetrofitProvider
 import com.example.weatherNow.model.entity.response.ResponseEntity
+import javax.inject.Inject
 
-object Repository {
-
+object Repository
+//@Inject constructor(
+//    private val dataProvider: WeatherSource
+//)
+{
     private lateinit var dataProvider: DataProvider
     private val internetProvider: RetrofitProvider = RetrofitProvider()
 

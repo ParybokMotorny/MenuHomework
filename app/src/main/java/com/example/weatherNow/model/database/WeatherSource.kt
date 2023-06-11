@@ -9,8 +9,6 @@ class WeatherSource(
     private var dao: WeatherDao
 ) : DataProvider {
 
-    var weathers: List<WeatherEntity> = dao.getAllWeathers()
-
     override fun subscribeToAllWeathers(): LiveData<List<WeatherEntity>>
         = MutableLiveData(dao.getAllWeathers())
 
