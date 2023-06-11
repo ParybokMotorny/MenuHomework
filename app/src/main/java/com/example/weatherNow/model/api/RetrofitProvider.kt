@@ -1,10 +1,16 @@
 package com.example.weatherNow.model.api
 
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.weatherNow.BuildConfig
 import com.example.weatherNow.model.entity.response.ResponseEntity
+import java.io.FileInputStream
+import java.util.Properties
 
 class RetrofitProvider : InternetProvider {
+
     override fun request(city: String): LiveData<ResponseEntity> {
         val result = MutableLiveData<ResponseEntity>()
 
@@ -15,7 +21,7 @@ class RetrofitProvider : InternetProvider {
         })
             .run(
                 city,
-                "6b0423304b20ad534ccceecc6d3c729a"
+                BuildConfig.OPEN_WEATHER_API_TOKEN
             )
 
         return result
@@ -23,7 +29,6 @@ class RetrofitProvider : InternetProvider {
 
     override fun request(latitude: Float, longitude: Float): LiveData<ResponseEntity> {
         val result = MutableLiveData<ResponseEntity>()
-
         Retrofit({ request ->
             result.value = ResponseEntity.Success(request)
         }, { exception ->
@@ -32,7 +37,7 @@ class RetrofitProvider : InternetProvider {
             .run(
                 latitude,
                 longitude,
-                "6b0423304b20ad534ccceecc6d3c729a"
+                BuildConfig.OPEN_WEATHER_API_TOKEN
             )
 
         return result

@@ -3,8 +3,22 @@ plugins {
     id 'com.android.application' version '7.2.0' apply false
     id 'com.android.library' version '7.2.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.1' apply false
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task customTask {
+    doLast {
+        def properties = new Properties()
+
+        def localPropertiesFile = project.rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.newDataInputStream())
+        }
+
+        // Use the properties object as needed
+    }
 }
