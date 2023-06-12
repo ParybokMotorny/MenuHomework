@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,8 +22,7 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     private var sorting = Sortings.DATEDESC
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
@@ -67,31 +67,41 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     }
 
     private fun showDialog(message: String, function: () -> Unit) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(message)
-            .setCancelable(false)
-            .setNegativeButton("No")
-            { _, _ ->
-            }
-            .setPositiveButton("Yes")
-            { _, _ ->
+        AlertDialog.Builder(requireContext()).setTitle(message).setCancelable(false)
+            .setNegativeButton("No") { _, _ ->
+            }.setPositiveButton("Yes") { _, _ ->
                 function()
-            }
-            .create()
-            .show()
-
+            }.create().show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         requireActivity().menuInflater.inflate(R.menu.history_options_menu, menu)
+        val search = menu.findItem(R.id.action_search)
+        val searchView = search.actionView as SearchView
+
+        searchView.queryHint = "Search for city"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.search(newText)
+                    return true
+                } ?: return false
+            }
+        })
+        searchView.setOnCloseListener {
+            viewModel.search("")
+            return@setOnCloseListener false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            return true
-        } else if (id == R.id.action_clear) {
+        if (id == R.id.action_clear) {
             showDialog("Are you sure that you want to delete all elements?") {
                 viewModel.deleteAll()
                 adapter.weathers = mutableListOf()
@@ -130,9 +140,7 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     }
 
     override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
+        menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
         requireActivity().menuInflater.inflate(R.menu.history_long_click_menu, menu)
@@ -154,11 +162,8 @@ class HistoryFragment : Fragment(), RequestRecyclerAdapter.OnItemClickListener {
     override fun onItemClick(view: View, element: WeatherEntity) {
         val fragment = WeatherFragment.newInstanceFromHistoryFragment(element)
 
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+        parentFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+            .addToBackStack(null).commit()
     }
 
     companion object {

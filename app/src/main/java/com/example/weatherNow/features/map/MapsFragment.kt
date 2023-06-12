@@ -2,7 +2,6 @@ package com.example.weatherNow.features.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -29,9 +28,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 
-class MapsFragment :
-    Fragment(),
-    OnMapReadyCallback {
+class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var binding: FragmentMapsBinding? = null
     private var currentMarker: Marker? = null
@@ -41,8 +38,7 @@ class MapsFragment :
     private lateinit var viewModel: MapsViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
         return binding?.root
@@ -51,7 +47,7 @@ class MapsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MapsViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MapsViewModel::class.java]
 
         viewModel.getViewState().observe(requireActivity()) { state ->
             state.data?.let {
@@ -64,8 +60,7 @@ class MapsFragment :
 
         currentPosition = loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
 
-        val mapFragment = childFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         requestPermissions()
@@ -74,17 +69,15 @@ class MapsFragment :
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        currentMarker =
-            mMap?.addMarker(
-                MarkerOptions().position(currentPosition)
-                    .title(getString(R.string.current_position))
-            )!!
+        currentMarker = mMap?.addMarker(
+            MarkerOptions().position(currentPosition).title(getString(R.string.current_position))
+        )!!
         mMap?.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
 
         mMap?.setOnMapLongClickListener {
             savePreferences(requireActivity().getPreferences(MODE_PRIVATE), currentPosition)
 
-            viewModel.loadNote(
+            viewModel.loadWeather(
                 it.latitude.toFloat(),
                 it.longitude.toFloat(),
             )
@@ -109,12 +102,9 @@ class MapsFragment :
 
     private fun requestPermissions() {
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-            || ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             requestLocation()
@@ -127,17 +117,14 @@ class MapsFragment :
     private fun requestLocation() {
 
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) return
 
-        val locationManager = requireActivity()
-            .getSystemService(LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         criteria.accuracy = Criteria.ACCURACY_COARSE
 
@@ -157,43 +144,30 @@ class MapsFragment :
 
     private fun requestLocationPermissions() {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.CALL_PHONE
+                requireActivity(), Manifest.permission.CALL_PHONE
             )
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(), arrayOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                PERMISSION_REQUEST_CODE
+                ), PERMISSION_REQUEST_CODE
             )
         }
     }
 
 
     private fun renderData(weather: WeatherEntity) {
-
         val fragment = WeatherFragment.newInstanceFromSearchFragment(weather)
+        parentFragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+            .addToBackStack(null).commit()
 
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-
-        //viewModel.saveChanges(weather.copyWeather())
+        viewModel.saveChanges(weather.copyWeather())
     }
 
     private fun renderError(message: String) {
-
-        AlertDialog.Builder(requireContext())
-            .setTitle(message)
-            .setCancelable(false)
-            .setPositiveButton("OK")
-            { _, _ -> }
-            .create()
-            .show()
+        AlertDialog.Builder(requireContext()).setTitle(message).setCancelable(false)
+            .setPositiveButton("OK") { _, _ -> }.create().show()
     }
 
 

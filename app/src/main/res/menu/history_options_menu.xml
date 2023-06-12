@@ -38,9 +38,4 @@
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:title="@string/clear"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
 </menu>

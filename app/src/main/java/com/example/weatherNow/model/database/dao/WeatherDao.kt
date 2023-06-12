@@ -39,4 +39,7 @@ interface WeatherDao {
             "CASE WHEN :isAsc = 1 THEN date END ASC, " +
             "CASE WHEN :isAsc = 2 THEN date END DESC ")
     fun getAllSortedByDate(isAsc : Int): List<WeatherEntity>
+
+    @Query("SELECT * FROM WeatherEntity WHERE city LIKE '%' || :str || '%'")
+    fun search(str: String): List<WeatherEntity>
 }

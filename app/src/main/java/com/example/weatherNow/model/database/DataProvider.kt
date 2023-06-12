@@ -18,4 +18,6 @@ interface DataProvider {
     fun getAllSortedByName(isAsc: Int): LiveData<List<WeatherEntity>>
 
     fun getAllSortedByDate(isAsc: Int): LiveData<List<WeatherEntity>>
+
+    fun search(str: String): LiveData<List<WeatherEntity>>
 }

@@ -36,5 +36,6 @@ class WeatherSource(
     override fun getAllSortedByDate(isAsc: Int): LiveData<List<WeatherEntity>> =
         MutableLiveData(dao.getAllSortedByDate(isAsc))
 
-
+    override fun search(str: String): LiveData<List<WeatherEntity>> =
+        MutableLiveData(dao.search(str))
 }

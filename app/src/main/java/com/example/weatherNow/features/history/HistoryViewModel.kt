@@ -34,6 +34,10 @@ class HistoryViewModel(
         repository.deleteAll()
     }
 
+    fun search(str: String){
+        viewStateLiveData.value = HistoryViewState(repository.search(str).value)
+    }
+
     fun sort(type : Int) {
         viewStateLiveData.value = HistoryViewState(weather = when(type){
             Sortings.DATE -> repository.getAllSortedByDate(1).value

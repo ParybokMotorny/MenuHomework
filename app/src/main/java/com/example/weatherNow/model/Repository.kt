@@ -35,6 +35,8 @@ object Repository
 
     fun getAllSortedByDate(isAsc: Int) = dataProvider.getAllSortedByDate(isAsc)
 
+    fun search(str: String) = dataProvider.search(str)
+
     fun request(city: String): LiveData<ResponseEntity> =
         internetProvider.request(city)
 

@@ -14,7 +14,7 @@ class MapsViewModel(private val repository: Repository = Repository) :
     }
 
 
-    fun loadNote(latitude: Float, longitude: Float) {
+    fun loadWeather(latitude: Float, longitude: Float) {
         repository.request(latitude, longitude).observeForever { requestResult ->
             if (requestResult == null) return@observeForever
 
