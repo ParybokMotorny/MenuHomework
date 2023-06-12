@@ -10,9 +10,6 @@ import com.example.weatherNow.model.entity.response.ResponseEntity
 import javax.inject.Inject
 
 object Repository
-//@Inject constructor(
-//    private val dataProvider: WeatherSource
-//)
 {
     private lateinit var dataProvider: DataProvider
     private val internetProvider: RetrofitProvider = RetrofitProvider()
