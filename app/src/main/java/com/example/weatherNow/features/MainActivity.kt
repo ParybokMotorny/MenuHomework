@@ -34,6 +34,8 @@ class MainActivity :
         val toolbar = initToolbar()
         initDrawer(toolbar)
 
+        //test
+
         Repository.initProvider(App.instance.db.weatherDao)
 
         // if this is the first entry into the application,
