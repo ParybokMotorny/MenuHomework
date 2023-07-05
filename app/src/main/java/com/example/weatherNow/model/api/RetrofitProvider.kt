@@ -7,10 +7,6 @@ import com.example.weatherNow.model.entity.response.ResponseEntity
 
 class RetrofitProvider : InternetProvider {
 
-    init {
-        
-    }
-
     override fun request(city: String): LiveData<ResponseEntity> {
         val result = MutableLiveData<ResponseEntity>()
 
@@ -21,7 +17,8 @@ class RetrofitProvider : InternetProvider {
         })
             .run(
                 city,
-                BuildConfig.OPEN_WEATHER_API_TOKEN
+//                BuildConfig.OPEN_WEATHER_API_TOKEN
+                "6b0423304b20ad534ccceecc6d3c729a"
             )
 
         return result
@@ -37,7 +34,8 @@ class RetrofitProvider : InternetProvider {
             .run(
                 latitude,
                 longitude,
-                BuildConfig.OPEN_WEATHER_API_TOKEN
+                "6b0423304b20ad534ccceecc6d3c729a"
+//                BuildConfig.OPEN_WEATHER_API_TOKEN
             )
 
         return result

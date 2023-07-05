@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${GOOGLE_MAPS_API_KEY}" />
+            android:value="AIzaSyDo-VeCqvk8Skz6cW-iCWHiqXEpT40Jvac" />
         <activity
             android:name="com.example.weatherNow.features.MainActivity"
             android:exported="true">
